@@ -10,29 +10,37 @@ def check_its_strength(available_its):
 def login():
     options = ChromeOptions()
     driver = webdriver.Chrome(options=options)
-    driver.get("http://gstatic.com/generate_204")
-
-    # submitBtn = driver.find_element(By.TAG_NAME, "input")
-    # submitBtn.click()
-
-    # redirectBtn = driver.find_element(By.ID, "openPortalLoginPageButton")
-    # redirectBtn.click()
-
-    username = driver.find_element(By.ID, "un")
-    password = driver.find_element(By.ID, "pd")
-    # submitBtn = driver.find_element(By.TAG_NAME, "input")
-    submitBtn = driver.find_element_by_css_selector("body > div > div > form > div:nth-child(7) > input[type=submit]")
-
-    print(submitBtn)
 
     userCredentials = {
         "username": "B320063",
         "password": "B320063"
     }
 
-    username.send_keys(userCredentials["username"])
-    password.send_keys(userCredentials["password"])
-    submitBtn.click()
+    try:
+        driver.get("http://gstatic.com/generate_204")
+
+        # submitBtn = driver.find_element(By.TAG_NAME, "input")
+        # submitBtn.click()
+
+        # redirectBtn = driver.find_element(By.ID, "openPortalLoginPageButton")
+        # redirectBtn.click()
+
+        username = driver.find_element(By.ID, "un")
+        password = driver.find_element(By.ID, "pd")
+        submitBtn = driver.find_element_by_css_selector("body > div > div > form > div:nth-child(7) > input[type=submit]")
+
+        # print(submitBtn)
+
+        username.send_keys(userCredentials["username"])
+        password.send_keys(userCredentials["password"])
+        submitBtn.click()
+    
+    except:
+        print("Error logging in to the wifi network")
+
+    else:
+        pass
+
 
 
 # Check available connections
@@ -54,7 +62,8 @@ for _ in devices:
 print(available_its)
 
 if(len(available_its) == 1):
-    subprocess.check_output(['netsh', 'wlan', 'connect', 'name=ITS700'])
+    print("true")
+    subprocess.check_output(['netsh', 'wlan', 'connect', 'name=ITS7000'])
     login()
 else:
     check_its_strength(available_its)
