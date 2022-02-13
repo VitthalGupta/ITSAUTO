@@ -18,3 +18,7 @@ Automation of firewall authentication of ITS.
 
 ## Note:
     Reconnection of wifi network connection may be applicable in case a better connection is discovered (in terms of signal of BSSID for the various SSID's available.)
+
+# Developed by (Alphabetical)
+# Bignesh Sahoo - b319013@iiit-bh.ac.in
+# Vitthal Gupta - b319063@iiit-bh.ac.in
