@@ -1,8 +1,113 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
 import subprocess
 import platform
 import time
+import os
+import sys
+
+# Checking for internet connection
+def check_internet():
+    try:
+        subprocess.check_output(["ping", "www.google.com", "-c", "3"])
+        return True
+    except subprocess.CalledProcessError:
+        return False
+
+
+# Get the current working directory
+path = os.getcwd()
+print("Current working directory is: " + path)
+
+# Creating a variable to store whether the algorithm is connected for the first time
+var_dir = os.path.join(path, "var")
+if os.path.exists(var_dir):
+    pass
+else:
+    os.mkdir(var_dir)
+    os.chdir(var_dir)
+    var_file= open("var.txt","a")
+    
+    var_file.close()
+    os.chdir(path)
+
+
+
+
+# Initial check for internet connection
+if check_internet():
+    print("Internet connection is available")
+else:
+    print("Internet connection is required to install the required packages")
+    print("Please connect to the internet and try again")
+
+# Function to install the required packages
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+# Check if the required packages are installed
+try:
+    from selenium import webdriver
+    from selenium.webdriver.common.by import By
+except ImportError as e:
+    print("Installing Selenium")
+    install("selenium")
+    from selenium import webdriver
+    from selenium.webdriver.common.by import By
+
+# Check if wget is installed
+if platform.system() == "Windows":
+    if not os.path.exists("wget.exe"):
+        print("Installing wget for Windows")
+        install("wget")
+elif platform.system() == "Linux":
+    if os.system("wget --version") != 0:
+        print("Installing wget for Linux")
+        os.system("sudo apt-get install wget")
+        import wget
+    else:
+        import wget
+elif platform.system() == "Darwin":
+    try:
+        import wget
+    except ImportError as e:
+        print("Installing wget for Mac")
+        install("wget")
+        import wget
+
+    
+
+
+# Checking and downloading ChromeDriver
+fd_list = os.listdir(path)
+ch_directory = 'chromedriver'
+if 'chromedriver' in fd_list:
+    print("ChromeDriver is already downloaded")
+else:
+    ch_path = os.path.join(path, ch_directory)
+    print("Creating a directory for ChromeDriver")
+    os.mkdir(ch_path)
+    os.chdir(ch_path)
+    print("Downloading ChromeDriver")
+    if platform.system() == "Windows":
+        print("Downloading ChromeDriver for Windows")
+        wget.download("https://chromedriver.storage.googleapis.com/2.41/chromedriver_win32.zip")
+    elif platform.system() == "Linux":
+        print("Downloading ChromeDriver for Linux")
+        wget.download("https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip")
+    elif platform.system() == "Darwin":
+        print("Downloading ChromeDriver for Mac")
+        wget.download("https://chromedriver.storage.googleapis.com/2.41/chromedriver_mac64.zip")
+
+    print("Unzipping ChromeDriver")
+    if platform.system() == "Windows":
+        os.system("unzip chromedriver_win32.zip")
+        os.remove("chromedriver_win32.zip")
+    elif platform.system() == "Linux":
+        os.system("unzip chromedriver_linux64.zip")
+        os.remove("chromedriver_linux64.zip")
+    elif platform.system() == "Darwin":
+        os.system("unzip chromedriver_mac64.zip")
+        os.remove("chromedriver_mac64.zip")
+    print("ChromeDriver is downloaded")
 
 #Algorithm execution based on the os detected
 def os_detect():
@@ -21,12 +126,12 @@ def os_detect():
 
 def algo_mac():
     def login_mac():
-        options = Options.Safari()
-        driver = webdriver.Safari(options=options, executable_path='/Users/vitthal/Documents/GitHub/ITSAUTO/chromedriver')
+        options = options.Safari()
+        driver = webdriver.Safari(options=options, executable_path='/usr/bin/safaridriver')
 
         userCredentials = {
-            "username": "B320063",
-            "password": "B320063"
+            "username": "B319063",
+            "password": "shyamsundergupta12"
         }
 
         try:
@@ -83,4 +188,10 @@ def algo_mac():
     subprocess.check_output(['networksetup', '-setairportnetwork', 'en0',only_its[0], 'iiitbbsr'])
     login_mac()
 
+# def algo_windows():
+#     def login_windows():
+
+# def algo_linux():
+
+# Initialising the algorithm
 os_detect()

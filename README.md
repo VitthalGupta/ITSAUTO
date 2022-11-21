@@ -1,7 +1,22 @@
 # ITSAUTO
 Automation of firewall authentication of ITS.
 
+## Required Packages
+### Mac OS X
+- [Homebrew](https://brew.sh/)
+- [Python 3](https://www.python.org/)
+- [pip](https://pip.pypa.io/en/stable/installing/)
+
+### Linux
+- [Python 3](https://www.python.org/)
+- [pip](https://pip.pypa.io/en/stable/installing/)
+
+### Windows
+- [Python 3](https://www.python.org/)
+- [pip](https://pip.pypa.io/en/stable/installing/)
+
 ## Working -
+
 
 # Step 1
     Detection of compatible network: This process checks whether there is a compatible wifi connection available in proximity. In our use case this refers to any SSID with the prefix of  "ITS".
