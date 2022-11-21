@@ -21,8 +21,8 @@ def os_detect():
 
 def algo_mac():
     def login_mac():
-        options = ChromeOptions()
-        driver = webdriver.Chrome(options=options, executable_path='/Users/vitthal/Documents/GitHub/ITSAUTO/chromedriver')
+        options = Options.Safari()
+        driver = webdriver.Safari(options=options, executable_path='/Users/vitthal/Documents/GitHub/ITSAUTO/chromedriver')
 
         userCredentials = {
             "username": "B320063",
