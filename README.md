@@ -1,7 +1,7 @@
 # ITSAUTO
 Automation of firewall authentication of ITS.
 
-## How this scripts works -
+## Working -
 
 # Step 1
     Detection of compatible network: This process checks whether there is a compatible wifi connection available in proximity. In our use case this refers to any SSID with the prefix of  "ITS".
