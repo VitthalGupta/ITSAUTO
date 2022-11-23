@@ -3,6 +3,10 @@ import platform
 import time
 import os
 import sys
+import re
+import ctypes
+import getpass
+import configparser
 
 # Checking for internet connection
 def check_internet():
@@ -25,11 +29,9 @@ else:
     os.mkdir(var_dir)
     os.chdir(var_dir)
     var_file= open("var.txt","a")
-    
+
     var_file.close()
     os.chdir(path)
-
-
 
 
 # Initial check for internet connection
@@ -44,14 +46,38 @@ def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 # Check if the required packages are installed
+
+# Selenium
 try:
     from selenium import webdriver
     from selenium.webdriver.common.by import By
+    from selenium.webdriver.safari.options import Options
 except ImportError as e:
     print("Installing Selenium")
     install("selenium")
     from selenium import webdriver
     from selenium.webdriver.common.by import By
+    from selenium.webdriver.safari.options import Options
+
+# # check if selenium server is downloaded
+# Selenium server is not needed for standaslone tasks
+# selenium_dir = os.path.join(path, "selenium")
+# if os.path.exists(selenium_dir):
+#     print("Selenium server is already downloaded")
+# else:
+#     print("Downloading Selenium server")
+#     os.mkdir(selenium_dir)
+#     os.chdir(selenium_dir)
+#     subprocess.check_call(["curl", "-O", "https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar"])
+#     os.chdir(path) 
+
+#Check if Cryptography is installed
+try:
+    from cryptography.fernet import Fernet
+except ImportError as e:
+    print("Installing Cryptography")
+    install("cryptography")
+    from cryptography.fernet import Fernet
 
 # Check if wget is installed
 if platform.system() == "Windows":
@@ -109,6 +135,78 @@ else:
         os.remove("chromedriver_mac64.zip")
     print("ChromeDriver is downloaded")
 
+# Class defination for credentials
+class Credentials():
+    def __init__(self):
+        self.__username = ""
+        self.__key = ""
+        self.__password = ""
+        self.__key_file = 'key.key'
+        self.__time_of_exp = -1
+
+    @property
+    def password(self):
+        return self.__password
+
+    @password.setter
+    def password(self, password):
+        self.__key = Fernet.generate_key()
+        f = Fernet(self.__key)
+        self.__password = f.encrypt(password.encode()).decode()
+        del f
+
+    @property
+    def username(self):
+        return self.__username
+
+    @username.setter
+    def username(self, username):
+        while (username == ''):
+            username = input(
+                'Enter a proper User name, blank is not accepted:')
+        self.__username = username
+    
+    def create_cred(self):
+        os.chdir(path)
+        cred_file = "cred"
+        if os.path.exists(cred_file):
+            print("Credentials file already exists")
+        else:
+            os.mkdir(cred_file)
+            os.chdir(cred_file)
+            cred_filename = 'CredFile.ini'
+            with open(cred_filename, 'w') as file_in:
+                file_in.write("#Credential file:\nUsername={}\nPassword={}\n"
+                            .format(self.__username, self.__password))
+                file_in.write("++"*20)
+        #If there exists an older key file, This will remove it.
+        if (os.path.exists(self.__key_file)):
+            os.remove(self.__key_file)
+        #Open the Key.key file and place the key in it.
+        #The key file is hidden.
+        try:
+            os_name = platform.system()
+            # creating the key file
+            with open(self.__key_file, 'w') as key_in:
+                key_in.write(self.__key.decode())
+            # Hiding the key file
+            if (os_name == "Windows"):
+                os.system("attrib +h key.key")
+            elif (os_name == "Linux"):
+                os.system("chmod 600 key.key")
+            elif (os_name == "Darwin"):
+                os.system("chmod 600 key.key")
+            
+
+        except PermissionError as e:
+            print("Permission denied to hide the key file")
+            print("Please run the program as an administrator")
+        
+        self.__username = ""
+        self.__password = ""
+        self.__key = ""
+        self.__key_file
+
 #Algorithm execution based on the os detected
 def os_detect():
     os_name =platform.system()
@@ -126,16 +224,32 @@ def os_detect():
 
 def algo_mac():
     def login_mac():
-        options = options.Safari()
+        options = Options
+        options.page_load_strategy= 'eager'
+        options.to_capabilities()
+        options.binary_location = "/usr/bin/safaridriver"
         driver = webdriver.Safari(options=options, executable_path='/usr/bin/safaridriver')
 
-        userCredentials = {
-            "username": "B319063",
-            "password": "shyamsundergupta12"
-        }
-
+        # Fetching credentials from the  cred file
+        os.chdir(path)
+        cred_file = "cred"
+        os.chdir(cred_file)
+        cred_filename = 'CredFile.ini'
+        config = configparser.ConfigParser()
+        config.read(cred_filename)
+        username_id = config['DEFAULT']['Username']
+        password_id = config['DEFAULT']['Password']
+        # Fetching the key from the key file
+        key_file = 'key.key'
+        with open(key_file, 'r') as key_in:
+            key = key_in.read().encode()
+        f = Fernet(key)
+        password = f.decrypt(password.encode()).decode()
+        del f
+        
+        # Logging in
         try:
-            driver.get("http://gstatic.com/generate_204")
+            driver.get("https://192.168.1.250/connect/")
 
             # submitBtn = driver.find_element(By.TAG_NAME, "input")
             # submitBtn.click()
@@ -149,8 +263,8 @@ def algo_mac():
 
             # print(submitBtn)
 
-            username.send_keys(userCredentials["username"])
-            password.send_keys(userCredentials["password"])
+            username.send_keys(username_id)
+            password.send_keys(password_id)
             submitBtn.click()
         
         except:
@@ -186,7 +300,33 @@ def algo_mac():
 
     # Connect to the network {networksetup -setairportnetwork en0 <SSID_OF_NETWORK> <PASSWORD>}
     subprocess.check_output(['networksetup', '-setairportnetwork', 'en0',only_its[0], 'iiitbbsr'])
-    login_mac()
+    print("Connected to the network")
+    # Checking if credentials are present
+    os.chdir(path)
+    cred_file = "cred"
+    if os.path.exists(cred_file):
+        os.chdir(cred_file)
+        cred_filename = 'CredFile.ini'
+        if os.path.exists(cred_filename):
+            print("Credentials file exists")
+            login_mac()
+        else:
+            print("Credentials file does not exist")
+            print("Creating credentials file")
+            cred = Credentials()
+            cred.username = input("Enter your username: ")
+            cred.password = getpass.getpass("Enter your password: ")
+            cred.create_cred()
+            login_mac()
+    else:
+        print("Credentials file does not exist")
+        print("Creating credentials file")
+        cred = Credentials()
+        cred.username = input("Enter your username: ")
+        cred.password = getpass.getpass("Enter your password: ")
+        cred.create_cred()
+        login_mac()
+
 
 # def algo_windows():
 #     def login_windows():
