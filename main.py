@@ -8,14 +8,11 @@ import ctypes
 import getpass
 import configparser
 
-# Checking for internet connection
-def check_internet():
-    try:
-        subprocess.check_output(["ping", "www.google.com", "-c", "3"])
-        return True
-    except subprocess.CalledProcessError:
-        return False
+# import check internet
+from utility.check_internet import check_internet
 
+# import install package
+from utility.install_package import install
 
 # Get the current working directory
 path = os.getcwd()
@@ -41,9 +38,7 @@ else:
     print("Internet connection is required to install the required packages")
     print("Please connect to the internet and try again")
 
-# Function to install the required packages
-def install(package):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
 
 # Check if the required packages are installed
 
@@ -53,14 +48,18 @@ try:
     from selenium.webdriver.common.by import By
     from selenium.webdriver.safari.options import Options
     from selenium.webdriver.common.keys import Keys
+
     # update the variable file
     os.chdir(var_dir)
     var_file = open("var.txt", "r")
     var_file_data = var_file.read()
     var_file.close()
-    var_file_data = re.sub("Selenium installed : False", "Selenium installed : True", var_file_data)
-    var_file = open("var.txt", "w")
-    var_file.write(var_file_data)
+    # check if the variable is already set to false
+    if re.search("Selenium installed : False", var_file_data):
+        var_file_data = re.sub("Selenium installed : False", "Selenium installed : True", var_file_data)
+        var_file = open("var.txt", "w")
+        var_file.write(var_file_data)
+        var_file.close()
     var_file.close()
     os.chdir(path)
 except ImportError as e:
@@ -71,6 +70,7 @@ except ImportError as e:
     from selenium.webdriver.safari.options import Options
     from selenium.webdriver.common.keys import Keys
     os.chdir(var_dir)
+    #check if selenium is installed
     var_file = open("var.txt", "r")
     var_file_data = var_file.read()
     var_file.close()
@@ -343,23 +343,23 @@ def os_detect():
 def algo_mac():
     def login_mac():
 
-        # Fetching credentials from the  cred file
-        os.chdir(path)
-        cred_file = "cred"
-        os.chdir(cred_file)
-        cred_filename = 'CredFile.ini'
-        config = configparser.ConfigParser()
-        config.read(cred_filename)
-        username_id = config['DEFAULT']['Username']
-        password_id = config['DEFAULT']['Password']
-        # Fetching the key from the key file
-        key_file = 'key.key'
-        with open(key_file, 'r') as key_in:
-            key = key_in.read().encode()
-        f = Fernet(key)
-        password = f.decrypt(password.encode()).decode()
-        del f
-        os.chdir(path)
+        # # Fetching credentials from the  cred file
+        # os.chdir(path)
+        # cred_file = "cred"
+        # os.chdir(cred_file)
+        # cred_filename = 'CredFile.ini'
+        # config = configparser.ConfigParser()
+        # config.read(cred_filename)
+        # username_id = config['DEFAULT']['Username']
+        # password_id = config['DEFAULT']['Password']
+        # # Fetching the key from the key file
+        # key_file = 'key.key'
+        # with open(key_file, 'r') as key_in:
+        #     key = key_in.read().encode()
+        # f = Fernet(key)
+        # password = f.decrypt(password.encode()).decode()
+        # del f
+        # os.chdir(path)
 
         # launch safari web browser
         driver = webdriver.Safari()
@@ -427,7 +427,7 @@ def algo_mac():
         if its[0] not in only_its:
             only_its.append(its[0])
 
-    # Printing availbale SSID's
+    # Printing availble SSID's
     print("Available SSID'S: ")
     for _ in only_its:
             print(_)
