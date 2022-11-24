@@ -28,8 +28,8 @@ if os.path.exists(var_dir):
 else:
     os.mkdir(var_dir)
     os.chdir(var_dir)
-    var_file= open("var.txt","a")
-
+    var_file= open("var.txt","w")
+    var_file.write("Packages installed : False\nSelenium installed : False\nCryptography installed : False\nWget installed : False\nChrome driver installed : False\nChrome installed : False\nSafari driver installed : False\nSafari installed : False\nFirefox driver installed : False\nFirefox installed : False\nInternet connection : False\nSafari Driver Enabled: False")
     var_file.close()
     os.chdir(path)
 
@@ -52,15 +52,37 @@ try:
     from selenium import webdriver
     from selenium.webdriver.common.by import By
     from selenium.webdriver.safari.options import Options
+    from selenium.webdriver.common.keys import Keys
+    # update the variable file
+    os.chdir(var_dir)
+    var_file = open("var.txt", "r")
+    var_file_data = var_file.read()
+    var_file.close()
+    var_file_data = re.sub("Selenium installed : False", "Selenium installed : True", var_file_data)
+    var_file = open("var.txt", "w")
+    var_file.write(var_file_data)
+    var_file.close()
+    os.chdir(path)
 except ImportError as e:
     print("Installing Selenium")
     install("selenium")
     from selenium import webdriver
     from selenium.webdriver.common.by import By
     from selenium.webdriver.safari.options import Options
+    from selenium.webdriver.common.keys import Keys
+    os.chdir(var_dir)
+    var_file = open("var.txt", "r")
+    var_file_data = var_file.read()
+    var_file.close()
+    var_file_data = re.sub("Selenium installed : False",
+                           "Selenium installed : True", var_file_data)
+    var_file = open("var.txt", "w")
+    var_file.write(var_file_data)
+    var_file.close()
+    os.chdir(path)
 
 # # check if selenium server is downloaded
-# Selenium server is not needed for standaslone tasks
+# Selenium server is not needed for standalone tasks
 # selenium_dir = os.path.join(path, "selenium")
 # if os.path.exists(selenium_dir):
 #     print("Selenium server is already downloaded")
@@ -74,30 +96,113 @@ except ImportError as e:
 #Check if Cryptography is installed
 try:
     from cryptography.fernet import Fernet
+    os.chdir(var_dir)
+    var_file = open("var.txt", "r")
+    var_file_data = var_file.read()
+    var_file.close()
+    var_file_data = re.sub("Cryptography installed : False",
+                            "Cryptography installed : True", var_file_data)
+    var_file = open("var.txt", "w")
+    var_file.write(var_file_data)
+    var_file.close()
+    os.chdir(path)
 except ImportError as e:
     print("Installing Cryptography")
     install("cryptography")
     from cryptography.fernet import Fernet
+    os.chdir(var_dir)
+    var_file = open("var.txt", "r")
+    var_file_data = var_file.read()
+    var_file.close()
+    var_file_data = re.sub("Cryptography installed : False",
+                           "Cryptography installed : True", var_file_data)
+    var_file = open("var.txt", "w")
+    var_file.write(var_file_data)
+    var_file.close()
+    os.chdir(path)
 
 # Check if wget is installed
 if platform.system() == "Windows":
     if not os.path.exists("wget.exe"):
         print("Installing wget for Windows")
         install("wget")
+        # update the variable file
+        os.chdir(var_dir)
+        var_file = open("var.txt", "r")
+        var_file_data = var_file.read()
+        var_file.close()
+        var_file_data = re.sub("Wget installed : False", "Wget installed : True", var_file_data)
+        var_file = open("var.txt", "w")
+        var_file.write(var_file_data)
+        var_file.close()
+        os.chdir(path)
+    else:
+        print("wget is already installed")
+        os.chdir(var_dir)
+        var_file = open("var.txt", "r")
+        var_file_data = var_file.read()
+        var_file.close()
+        var_file_data = re.sub("Wget installed : False",
+                               "Wget installed : True", var_file_data)
+        var_file = open("var.txt", "w")
+        var_file.write(var_file_data)
+        var_file.close()
+        os.chdir(path)
 elif platform.system() == "Linux":
     if os.system("wget --version") != 0:
         print("Installing wget for Linux")
         os.system("sudo apt-get install wget")
         import wget
+        os.chdir(var_dir)
+        var_file = open("var.txt", "r")
+        var_file_data = var_file.read()
+        var_file.close()
+        var_file_data = re.sub("Wget installed : False",
+                               "Wget installed : True", var_file_data)
+        var_file = open("var.txt", "w")
+        var_file.write(var_file_data)
+        var_file.close()
+        os.chdir(path)
     else:
         import wget
+        print("wget is already installed")
+        os.chdir(var_dir)
+        var_file = open("var.txt", "r")
+        var_file_data = var_file.read()
+        var_file.close()
+        var_file_data = re.sub("Wget installed : False",
+                               "Wget installed : True", var_file_data)
+        var_file = open("var.txt", "w")
+        var_file.write(var_file_data)
+        var_file.close()
+        os.chdir(path)
 elif platform.system() == "Darwin":
     try:
         import wget
+        os.chdir(var_dir)
+        var_file = open("var.txt", "r")
+        var_file_data = var_file.read()
+        var_file.close()
+        var_file_data = re.sub("Wget installed : False",
+                               "Wget installed : True", var_file_data)
+        var_file = open("var.txt", "w")
+        var_file.write(var_file_data)
+        var_file.close()
+        os.chdir(path)
     except ImportError as e:
         print("Installing wget for Mac")
         install("wget")
         import wget
+        os.chdir(var_dir)
+        var_file = open("var.txt", "r")
+        var_file_data = var_file.read()
+        var_file.close()
+        var_file_data = re.sub("Wget installed : False",
+                               "Wget installed : True", var_file_data)
+        var_file = open("var.txt", "w")
+        var_file.write(var_file_data)
+        var_file.close()
+        os.chdir(path)
 
     
 
@@ -127,6 +232,7 @@ else:
     if platform.system() == "Windows":
         os.system("unzip chromedriver_win32.zip")
         os.remove("chromedriver_win32.zip")
+        
     elif platform.system() == "Linux":
         os.system("unzip chromedriver_linux64.zip")
         os.remove("chromedriver_linux64.zip")
@@ -134,6 +240,18 @@ else:
         os.system("unzip chromedriver_mac64.zip")
         os.remove("chromedriver_mac64.zip")
     print("ChromeDriver is downloaded")
+    # update the variable file
+    os.chdir(var_dir)
+    var_file = open("var.txt", "r")
+    var_file_data = var_file.read()
+    var_file.close()
+    var_file_data = re.sub("ChromeDriver installed : False",
+                           "ChromeDriver installed : True", var_file_data)
+    var_file = open("var.txt", "w")
+    var_file.write(var_file_data)
+    var_file.close()
+    os.chdir(path)
+
 
 # Class defination for credentials
 class Credentials():
@@ -226,7 +344,7 @@ def algo_mac():
     def login_mac():
         options = Options
         options.page_load_strategy= 'eager'
-        options.to_capabilities()
+        # options.to_capabilities()
         options.binary_location = "/usr/bin/safaridriver"
         driver = webdriver.Safari(options=options, executable_path='/usr/bin/safaridriver')
 
@@ -300,8 +418,26 @@ def algo_mac():
 
     # Connect to the network {networksetup -setairportnetwork en0 <SSID_OF_NETWORK> <PASSWORD>}
     subprocess.check_output(['networksetup', '-setairportnetwork', 'en0',only_its[0], 'iiitbbsr'])
-    print("Connected to the network")
+    print("Connected to : {} ".format(only_its[0]))
+
+#    # Enbling safari driver for mac and updating the var file
+#     print("Checking if Safari driver is enabled")
+#     os.chdir(var_dir)
+#     var_file = 'var.txt'
+#     # Finding Safari driver status in var file
+
+#     with open(var_file, 'r') as var_in:
+#         var = var_in.read()
+#     # Safari driver enble if false
+
+#     if var == '0':
+#         print("Enabling Safari driver")
+#         print('Enter the system password')
+#         os.system("sudo safaridriver --enable")
+        
+
     # Checking if credentials are present
+
     os.chdir(path)
     cred_file = "cred"
     if os.path.exists(cred_file):
