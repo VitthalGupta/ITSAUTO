@@ -6,10 +6,12 @@ import getpass
 # import check internet
 from utility.check_internet import check_internet
 
+
  # import credentials
 # from utility.credentials import Credentials
 # # import install package
 # from utility.install_package import install
+
 
 # Importing algorithms
 
@@ -34,6 +36,7 @@ if os.path.exists(var_dir):
 else:
     os.mkdir(var_dir)
     os.chdir(var_dir)
+
     var_file = open("var.txt", "w")
     var_file.write("Login time: 300\nPackages installed : False\nSelenium installed : False\nCryptography installed : False\nWget installed : False\nChrome driver installed : False\nChrome installed : False\nSafari driver installed : False\nSafari installed : False\nFirefox driver installed : False\nFirefox installed : False\nInternet connection : False\nSafari Driver Enabled: False")
     var_file.close()
@@ -52,6 +55,7 @@ def first_time():
     else:
         print("Packages are already installed")
         os.chdir(path)
+
 
 
 #Algorithm execution based on the os detected
