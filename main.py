@@ -342,11 +342,6 @@ def os_detect():
 
 def algo_mac():
     def login_mac():
-        options = Options
-        options.page_load_strategy= 'eager'
-        # options.to_capabilities()
-        options.binary_location = "/usr/bin/safaridriver"
-        driver = webdriver.Safari(options=options, executable_path='/usr/bin/safaridriver')
 
         # Fetching credentials from the  cred file
         os.chdir(path)
@@ -364,6 +359,29 @@ def algo_mac():
         f = Fernet(key)
         password = f.decrypt(password.encode()).decode()
         del f
+        os.chdir(path)
+
+        # launch safari web browser
+        driver = webdriver.Safari()
+        driver.get("https://192.168.1.250/connect")
+        # wait for the page to load
+        time.sleep(5)
+        # find the username field
+        username = driver.find_element_by_id("LoginUserPassword_auth_username")
+        # enter the username
+        username.send_keys(cred.username)
+        # find the password field
+        password = driver.find_element_by_id("LoginUserPassword_auth_password")
+        # enter the password
+        password.send_keys(cred.password)
+        # find the login button
+        login = driver.find_element_by_id("UserCheck_Login_Button_span")
+        # click the login button
+        login.click()
+        # wait for the page to load
+        time.sleep(5)
+
+    
         
         # Logging in
         try:
