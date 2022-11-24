@@ -213,6 +213,7 @@ ch_directory = 'chromedriver'
 if 'chromedriver' in fd_list:
     print("ChromeDriver is already downloaded")
 else:
+    import wget 
     ch_path = os.path.join(path, ch_directory)
     print("Creating a directory for ChromeDriver")
     os.mkdir(ch_path)
