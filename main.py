@@ -380,8 +380,6 @@ def algo_mac():
         login.click()
         # wait for the page to load
         time.sleep(5)
-
-    
         
         # Logging in
         try:
