@@ -1,3 +1,6 @@
 driver/
-chromedriver
+chromedriver/
 selenium-server-standalone-3.141.59.jar
+var/
+cred/
+selenium/
