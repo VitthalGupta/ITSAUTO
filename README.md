@@ -1,25 +1,31 @@
 # ITSAUTO
-Automation of firewall authentication of ITS.
+This repo will automate the authentication process for ITS for all available networks. We recommend you to ensure that 
 
 ## Required Packages
 ### Mac OS X
 - [Python 3](https://www.python.org/)
 - [pip](https://pip.pypa.io/en/stable/installing/)
+- [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
 ### Linux
 - [Python 3](https://www.python.org/)
 - [pip](https://pip.pypa.io/en/stable/installing/)
+- [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
 ### Windows
 - [Python 3](https://www.python.org/)
 - [pip](https://pip.pypa.io/en/stable/installing/)
+- [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
 ## Installation
-- Clone the repository
-- Open a terminal and [navigate](https://www.redhat.com/sysadmin/navigating-filesystem-linux-terminal) to the repository
-- type 'python3 main.py' to run the program
+- Clone the [repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) to your local machine.
+- Open a terminal and [navigate](https://www.redhat.com/sysadmin/navigating-filesystem-linux-terminal) to the repository.
+- Type 'python3 main.py' to run the program
+- Internet is needed for the first time to install the required packages, connect to ITS network if you are running the script for thr first time.
 - Depending on your system, you may need to use 'python' instead of 'python3'
 - Dependecies will be installed automatically
+- The script can be run in the background using [screen](https://www.howtogeek.com/662422/how-to-use-linuxs-screen-command/) (for linux and mac users only).
+- You can also use [cron](https://opensource.com/article/17/11/how-use-cron-linux) to run the script at the time of startup, or at a specific time. (for linux and mac users only).
 
 ## Working -
 
