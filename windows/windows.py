@@ -2,12 +2,21 @@ import subprocess
 import os
 import re
 import sys
+import zipfile
 
 sys.path.append("..")
 
 from utility.check_internet import check_internet
+from utility.install_package import install
 
-path = os.getcwd()
+from path import path, var_dir, cred_dir
+
+def check_internet():
+    try:
+        subprocess.check_output(["ping", "www.google.com"])
+        return True
+    except subprocess.CalledProcessError:
+        return False
 
 def setup():
     '''
@@ -16,10 +25,11 @@ def setup():
     print("Checking dependencies...")
 
     # Creating a variable to store whether the algorithm is connected for the first time
-    var_dir = os.path.join(path, "var")
+    # var_dir = os.path.join(path, "var")
     if os.path.exists(var_dir):
         pass
     else:
+        print(var_dir)
         os.mkdir(var_dir)
         os.chdir(var_dir)
         var_file= open("var.txt","w")
@@ -36,12 +46,90 @@ def setup():
             
     if check_true_dependencies() == True:
         pass
-    elif check_internet():
+    elif check_internet() == True:
         print("Connected to internet. Checking for missing dependencies")
     else:
         print("An internet connection is required to install. Kindly connect to the internet and try again.")
+        sys.exit("Script terminated")
 
+    # checking for selenium packages
+    try:
+        from selenium import webdriver
+        from selenium.webdriver.common.by import By
+        from selenium.webdriver.safari.options import Options
+        from selenium.webdriver.common.keys import Keys
+
+
+    except ImportError:
+        print("Selenium not installed")
+        print("Installing Selenium")
+        install("selenium")
     
+    finally:
+        os.chdir(var_dir)
+        with open("var.txt","r") as f:
+            file_data = f.read()
+            if(re.search("Selenium installed : False", file_data)):
+                file_data = re.sub("Selenium installed : False", "Selenium installed : True", file_data)
+        
+        with open("var.txt", "w") as f:
+            f.write(file_data)
+        os.chdir(path)
+
+    # checking for Cryptography package installed
+    try:
+        from cryptography.fernet import Fernet
+    except ImportError:
+        print("Cryptography not installed")
+        print("Installing Cryptography")
+        install("cryptography")
+    finally:
+        os.chdir(var_dir)
+        with open("var.txt","r") as f:
+            file_data = f.read()
+            if(re.search("Cryptography installed : False", file_data)):
+                file_data = re.sub("Cryptography installed : False", "Cryptography installed : True", file_data)
+        
+        with open("var.txt", "w") as f:
+            f.write(file_data)
+        os.chdir(path)
+
+    # checking for wget package installed
+    # try:
+    #     import wget
+    # except ImportError:
+    #     print("Wget not installed")
+    #     print("Installing Wget")
+    #     install("wget")
+    # finally:
+    #     os.chdir(var_dir)
+    #     with open("var.txt","r") as f:
+    #         file_data = f.read()
+    #         if(re.search("Wget installed : False", file_data)):
+    #             file_data = re.sub("Wget installed : False", "Wget installed : True", file_data)
+        
+    #     with open("var.txt", "w") as f:
+    #         f.write(file_data)
+    #     os.chdir(path)
+    
+    # checking if Chromedriver is available or not
+    if os.path.exists(f"{path}/chromedriver/chromedriver.exe"):
+        pass
+    else:
+        import requests
+        chrome_driver_url = "https://chromedriver.storage.googleapis.com/107.0.5304.62/chromedriver_win32.zip"
+        print("Downloading Chrome Driver")
+        r = requests.get(chrome_driver_url)
+        with open("chromedriver.zip", 'wb') as fd:
+            for chunk in r.iter_content(chunk_size=128):
+                fd.write(chunk)
+
+        print("Extracting Chrome Driver")
+        with zipfile.ZipFile("chromedriver.zip", 'r') as zip_ref:
+            zip_ref.extractall("chromedriver")
+
+        os.remove("chromedriver.zip")
+
 
 def add_its_profile(ssid, key="iiitbbsr"):
     '''
