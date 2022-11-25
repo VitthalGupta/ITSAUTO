@@ -4,7 +4,7 @@ import re
 
 # import check internet
 from utility.check_internet import check_internet
-from utility.update_script import update_script
+from utility.update_script import update_script, check_release
 from utility.update_var import update_var
 
  # import credentials
@@ -89,6 +89,8 @@ if auto_update == "True":
     if check_internet():
         print("Checking for updates")
         # update_script()
+        # print("Checking for new releases")
+        # check_release()
 
 
 #Algorithm execution based on the os detected

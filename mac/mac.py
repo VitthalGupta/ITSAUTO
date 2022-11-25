@@ -197,7 +197,7 @@ def algo_mac():
 
 #     with open(var_file, 'r') as var_in:
 #         var = var_in.read()
-#     # Safari driver enble if false
+#     # Safari driver enable if false
 
 #     if var == '0':
 #         print("Enabling Safari driver")
