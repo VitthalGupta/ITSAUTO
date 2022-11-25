@@ -101,7 +101,7 @@ def os_detect():
         # algo_window()
     elif os_name == "Linux":
         print("Executing algorithm for Linux")
-        # algo_linux()
+        # # algo_linux()
     elif os_name == "Darwin":
         print("Executing algorithm for Mac")
         algo_mac()
