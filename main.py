@@ -88,7 +88,7 @@ auto_update = auto_update.group(1)
 if auto_update == "True":
     if check_internet():
         print("Checking for updates")
-        update_script()
+        # update_script()
 
 
 #Algorithm execution based on the os detected
