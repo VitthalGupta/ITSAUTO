@@ -4,7 +4,7 @@ import re
 
 # import check internet
 from utility.check_internet import check_internet
-from utility.update_script import update_script, check_release
+# from utility.update_script import update_script, check_release
 from utility.update_var import update_var
 
  # import credentials
