@@ -6,17 +6,11 @@ import zipfile
 
 sys.path.append("..")
 
-from utility.check_internet import check_internet
+from utility.check_internet import check_internet_windows
 from utility.install_package import install
 
 from path import path, var_dir, cred_dir
 
-def check_internet():
-    try:
-        subprocess.check_output(["ping", "www.google.com"])
-        return True
-    except subprocess.CalledProcessError:
-        return False
 
 def setup():
     '''
@@ -46,7 +40,7 @@ def setup():
             
     if check_true_dependencies() == True:
         pass
-    elif check_internet() == True:
+    elif check_internet_windows() == True:
         print("Connected to internet. Checking for missing dependencies")
     else:
         print("An internet connection is required to install. Kindly connect to the internet and try again.")

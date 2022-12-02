@@ -7,3 +7,10 @@ def check_internet():
         return True
     except subprocess.CalledProcessError:
         return False
+
+def check_internet_windows():
+    try:
+        subprocess.check_output(["ping", "1.1.1.1"])
+        return True
+    except subprocess.CalledProcessError:
+        return False
