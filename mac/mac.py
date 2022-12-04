@@ -6,15 +6,13 @@ import re
 import getpass
 
 from utility.install_package import install
-from utility.check_internet import check_internet
+from utility.check_internet import check_internet_mac
 from utility.credentials import Credentials
 from utility.update_var import update_var
-
+from utility.fetch_data import fetch_var
 
 # get the dir route to main var file
 from path import path, var_dir
-
-print("Current working directory is: " + path)
 
 def algo_mac():
 
@@ -36,11 +34,10 @@ def algo_mac():
         from selenium.webdriver.safari.options import Options
         from selenium.webdriver.common.keys import Keys
         from selenium.webdriver.support.ui import WebDriverWait
-        os.chdir(var_dir)
         # update the variable file
         update_var("Selenium installed : False", "Selenium installed : True")
 
-        #Check if Cryptography is installed
+    #Check if Cryptography is installed
     try:
         from cryptography.fernet import Fernet
         # update the variable file
@@ -52,27 +49,17 @@ def algo_mac():
         # update the variable file
         update_var("Cryptography installed : False", "Cryptography installed : True")
 
-
     def login_mac():
         #fetch count from var file
-        os.chdir(var_dir)
-        var_file = open("var.txt", "r")
-        var_file_data = var_file.read()
-        var_file.close()
-        count = re.search("Count : (.*)", var_file_data)
-        count = count.group(1)
-        print("Logging in  " + str(count)  + " time")
+        count = fetch_var("Count")
+        print("Login count: " + str(count))
         # Fetching credentials from the  cred file
         os.chdir(path)
         cred_file = "cred"
         os.chdir(cred_file)
         cred_filename = 'CredFile.ini'
         # read username from the cred file using configparser
-        # config = configparser.ConfigParser()
-        # config.read(cred_filename)
-        # username = config['Cred']['username']
 
-        # key_file= 'key.key'
         key = ''
         with open('key.key', 'r') as key_in:
             key = key_in.read().encode()
@@ -86,38 +73,24 @@ def algo_mac():
                 tuples = line.rstrip('\n').split('=', 1)
                 if tuples[0] in ('Username', 'Password'):
                     config[tuples[0]] = tuples[1]
-        # print(config)
         passwd = f.decrypt(config['Password'].encode()).decode()
-        # config = configparser.ConfigParser()
-        # config.read(cred_filename)
-        # username_id = config['DEFAULT']['Username']
-        # password_id = config['DEFAULT']['Password']
-        # # Fetching the key from the key file
-        # key_file = 'key.key'
-        # with open(key_file, 'r') as key_in:
-        #     key = key_in.read().encode()
-        # f = Fernet(key)
-        # password = f.decrypt(password.encode()).decode()
-        # del f
         os.chdir(path)
 
         # launch safari web browser and loging in 
-
-        driver = webdriver.Safari()
+        WINDOW_SIZE = "1920,1080"
+        safari_options= Options()
+        safari_options.add_argument("--headless")
+        safari_options.add_argument('--window-size={}'.format(WINDOW_SIZE))
+        driver = webdriver.Safari(options=safari_options)
         driver.get("https://192.168.1.250/connect")
         # wait for the page to load
         # fetch load page time from the var file
-        os.chdir(var_dir)
-        var_file = open("var.txt", "r")
-        var_file_data = var_file.read()
-        var_file.close()
-        load_page_time = re.search("Page Load Wait time : (.*)", var_file_data)
-        load_page_time = load_page_time.group(1)
-        load_page_time = int(load_page_time)
-        
-        # reload if the page is not loaded within 10 secs
-        try: 
-            WebDriverWait(driver, load_page_time).until(
+        load_page_time = fetch_var("Page Load Wait time")
+        # time.sleep(int(load_page_time))
+        # print(load_page_time)
+        # reload if the page is not loaded within load_page_time secs
+        try:
+            WebDriverWait(driver, int(load_page_time)).until(
                 lambda driver: driver.find_element("id", "LoginUserPassword_auth_username"))
             # find the username field
             username = driver.find_element("id","LoginUserPassword_auth_username")
@@ -133,17 +106,12 @@ def algo_mac():
             login.click()
             # wait for the page to load
             # fetch kill page time from the var file
-            os.chdir(var_dir)
-            var_file = open("var.txt", "r")
-            var_file_data = var_file.read()
-            var_file.close()
-            kill_page_time = re.search("Page kill time : (.*)", var_file_data)
-            kill_page_time = kill_page_time.group(1)
-            kill_page_time = int(kill_page_time)
-            time.sleep(kill_page_time)
-            os.chdir(path)
+            kill_page_time = fetch_var("Page kill time")
+            time.sleep(int(kill_page_time))
             # check if the login is successful
-            if not check_internet():
+            if check_internet_mac():
+                print("Login {} Successful".format(count))
+            else:
                 print("Login Failed")
                 login_mac()
         except:
@@ -152,7 +120,6 @@ def algo_mac():
             print("Page not loaded within {} secs".format(load_page_time))
             print("Reloading the page")
             login_mac()
-
 
     # Check available connections
     available_its = []
@@ -163,7 +130,7 @@ def algo_mac():
     for _ in devices:
         if (_.find("ITS") != -1):
             available_its.append(_.replace(" ", ""))
-        #print(available_its)
+        # print(available_its)
 
 
     #filtering data
@@ -178,31 +145,44 @@ def algo_mac():
     print("Available SSID'S: ")
     for _ in only_its:
         print(_)
+    if only_its==[]:
+        print("No ITS SSID's Found")
+        print("Exiting")
+        sys.exit()
+    else:
+        # Fetching SSID from the var file
+        if len(only_its) >= 1:
+            network_to_connect = only_its[0]
+        # Get preferred network from the var file
+        preferred_network = fetch_var("Preferred network")
+        # print("preferred network : ", preferred_network )
+        if preferred_network in only_its:
+            network_to_connect = preferred_network
 
-    # Connect to the network {networksetup -setairportnetwork en0 <SSID_OF_NETWORK> <PASSWORD>}
-    # only_its in not empty
-    if len(only_its) != 0:
-        subprocess.check_output(
-            ['networksetup', '-setairportnetwork', 'en0', only_its[0], 'iiitbbsr'])
-        print("Connected to : {} ".format(only_its[0]))
-    else: 
-        print("No ITS available")
-        algo_mac()
+        # Connect to the network {networksetup -setairportnetwork en0 <SSID_OF_NETWORK> <PASSWORD>}
+        # only_its in not empty
+        # check if the network is already connected to the prefered network
+        network_connected = subprocess.check_output(
+            ["/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport", "-I", "|", "awk", "'/", "SSID:/", "{print $2}'"])
+        network_connected = network_connected.decode('ascii')
+        network_connected = network_connected.split("\n")
+        for _ in network_connected:
+            if (_.find("ITS") != -1):
+                network_connected = _.replace(" ", "")
+        print(network_connected)
+        if len(network_connected)>=1:
+            network_connected = network_connected.split(":")
+        if preferred_network in network_connected:
+            print("Already connected to the preferred network: {}".format(network_connected[1]))
+        else:
+            if len(only_its) != 0:
+                subprocess.check_output(
+                    ['networksetup', '-setairportnetwork', 'en0', network_to_connect, 'iiitbbsr'])
+                print("Connected to : {} ".format(network_to_connect))
+            else: 
+                print("No ITS available")
+                algo_mac()
 
-#    # Enbling safari driver for mac and updating the var file
-#     print("Checking if Safari driver is enabled")
-#     os.chdir(var_dir)
-#     var_file = 'var.txt'
-#     # Finding Safari driver status in var file
-
-#     with open(var_file, 'r') as var_in:
-#         var = var_in.read()
-#     # Safari driver enable if false
-
-#     if var == '0':
-#         print("Enabling Safari driver")
-#         print('Enter the system password')
-#         os.system("sudo safaridriver --enable")
 
     # Checking if credentials are present
     os.chdir(path)
@@ -236,27 +216,14 @@ def algo_mac():
     # Update var file for safari browser
     update_var("Safari installed : False", "Safari installed : True")
 
-    # logging in every 5 minutes
+    # logging in every login_time seconds
     while True:
         login_mac()
         # update count from var file
-        os.chdir(var_dir)
-        var_file = open("var.txt", "r")
-        var_file_data = var_file.read()
-        var_file.close()
-        count = re.search("Count : (.*)", var_file_data)
-        count = count.group(1)
-        count = int(count)
+        count = int(fetch_var("Count"))
         count += 1
         # update count in var file
         update_var("Count : {}".format(count - 1), "Count : {}".format(count))
         # get the time duration from var file
-        os.chdir(var_dir)
-        var_file = 'var.txt'
-        os.chdir(var_dir)
-        var_file = open("var.txt", "r")
-        var_file_data = var_file.read()
-        var_file.close()
-        login_time = re.search("Login time: (.*)", var_file_data).group(1)
-        os.chdir(path)
+        login_time = fetch_var("Login time")
         time.sleep(int(login_time))
