@@ -62,6 +62,43 @@ This repo will automate the authentication process for ITS for all available net
 
  > Reconnection of wifi network connection may be applicable in case a better connection is discovered (in terms of signal of BSSID for the various SSID's available.)
 
+# Directory Structure
+.
+├── CODE_OF_CONDUCT.md
+├── LICENSE
+├── README.md
+├── cleanup.py
+├── cred
+│   ├── CredFile.ini
+│   └── key.key
+├── linux
+│   ├── README.md
+│   └── linux.py
+├── mac
+│   ├── README.md
+│   └── mac.py
+├── main.py
+├── path.py
+├── utility
+│   ├── __init__.py
+│   ├── check_internet.py
+│   ├── credentials.py
+│   ├── fetch_data.py
+│   ├── install_package.py
+│   ├── update_script.py
+│   └── update_var.py
+├── var
+│   └── var.txt
+└── windows
+    ├── README.md
+    ├── __pycache__
+    │   └── windows.cpython-310.pyc
+    └── windows.py
+
+10 directories, 33 files
+
 ## Developed by : -
-##### Vitthal Gupta - b319063@iiit-bh.ac.in
-##### Bignesh Sahoo - b319013@iiit-bh.ac.in
+
+Vitthal Gupta - b319063@iiit-bh.ac.in <br> [Github](https://github.com/VitthalGupta) <br> [LinkedIn](https://www.linkedin.com/in/vitthal-g-0a0717b8/)
+
+Bignesh Sahoo - b319013@iiit-bh.ac.in <br> [Github](https://github.com/bigsbunny) <br> [LinkedIn](https://www.linkedin.com/in/bighnesh-sahoo/)

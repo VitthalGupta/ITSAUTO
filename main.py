@@ -1,5 +1,6 @@
 import platform
 import os
+import argparse
 
 # import check internet
 from utility.check_internet import check_internet
@@ -8,7 +9,6 @@ from utility.check_internet import check_internet
 from utility.update_var import update_var
 from utility.fetch_data import fetch_var
 
-
 # Importing algorithms
 # from windows.windows import algo_window
 from mac.mac import algo_mac
@@ -16,7 +16,6 @@ from mac.mac import algo_mac
 
 # Get the current working directory
 from path import path, var_dir
-
 
 # Creating a variable to store whether the algorithm is connected for the first time
 var_dir = os.path.join(path, "var")
@@ -63,7 +62,6 @@ if auto_update == "True":
     if check_internet(os_name):
         print("Checking for new releases")
         # check_release()
-
 
 #Algorithm execution based on the os detected
 def os_detect():
