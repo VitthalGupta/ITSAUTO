@@ -3,11 +3,17 @@ import os
 import re
 import sys
 import zipfile
+import getpass
+import time
+import copy
+
+from cryptography.fernet import Fernet
 
 sys.path.append("..")
 
 from utility.check_internet import check_internet_windows
 from utility.install_package import install
+from utility.credentials import Credentials
 
 from path import path, var_dir, cred_dir
 
@@ -50,7 +56,6 @@ def setup():
     try:
         from selenium import webdriver
         from selenium.webdriver.common.by import By
-        from selenium.webdriver.safari.options import Options
         from selenium.webdriver.common.keys import Keys
 
 
@@ -149,9 +154,111 @@ def add_its_profile(ssid, key="iiitbbsr"):
     # Deleting the network profile file
     os.remove(f"{ssid}_profile.xml")
 
-def connect():
-    pass
+def check_credentials_file():
+    os.chdir(path)
+    if os.path.exists(cred_dir):
+        cred_filename = "CredFile.ini"
+        if os.path.exists(f"{cred_dir}/{cred_filename}"):
+            print("Credential file exists. Logging in...")
+            return
+        else:
+            print("Credentials file does not exist")
+            print("Creating credentials file")
+            cred = Credentials()
+            cred.username = input("Enter your username: ")
+            cred.password = getpass.getpass("Enter your password: ")
+            cred.create_cred()
+    else:
+        print("Credentials file does not exist")
+        print("Creating credentials file")
+        cred = Credentials()
+        cred.username = input("Enter your username: ")
+        cred.password = getpass.getpass("Enter your password: ")
+        cred.create_cred()
 
+def reading_credentials_file():
+    '''
+    Read credentials file and return username and password
+    '''
+    cred_filename = "CredFile.ini"
+    key_filename = "key.key"
+    os.chdir(cred_dir)
+
+    with open(key_filename, 'r') as key_f:
+        key = key_f.read().encode()
+    
+    f = Fernet(key)
+
+    with open(cred_filename, 'r') as cred_f:
+        cred_lines = cred_f.readlines()
+        user_auth = {}
+
+        for line in cred_lines:
+            line = line.strip()
+            if line.startswith("Username"):
+                username = line.split("=",1)[1].strip(" \n")
+                user_auth["username"] = username
+            if line.startswith("Password"):
+                password = line.split("=",1)[1].strip("\n")
+                # user_auth["password"] = password
+                # print(password)
+                user_auth["password"] = f.decrypt(password.encode()).decode()
+
+    # pd = f.decrypt(user_auth["password"].encode()).decode()
+    # print(pd)
+    os.chdir(path)
+    print(user_auth)
+    return user_auth
+
+def connect():
+    check_credentials_file()
+    user_auth = reading_credentials_file()
+
+    from selenium import webdriver
+    from selenium.webdriver.common.keys import Keys
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support.wait import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+
+    try:
+        driver = webdriver.Chrome(f"{path}/chromedriver/chromedriver.exe")
+        driver.get("https://192.168.1.250/connect")
+
+        # Below code block is used to bypass the warning issued by Chrome that the connection is not private and
+        adv_btn = driver.find_element(By.ID, "details-button")
+        adv_btn.click()
+        proceed_btn = driver.find_element(By.ID, "proceed-link")
+        proceed_btn.click()
+
+        try:
+            WebDriverWait(driver, 5).until(
+                EC.presence_of_element_located((By.ID, "LoginUserPassword_auth_password"))
+            )
+            un = driver.find_element(By.ID, "LoginUserPassword_auth_username")
+            un.send_keys(user_auth["username"])
+
+            pw = driver.find_element(By.ID, "LoginUserPassword_auth_password")
+            # pw.send_keys(user_auth["key"].decrypt(user_auth["password"].encode()).decode())
+            pw.send_keys(user_auth["password"])
+
+            login = driver.find_element(By.ID, "UserCheck_Login_Button_span")
+            login.click()
+
+            time.sleep(60)
+
+            print("Successfully logged in!")
+
+        except Exception as e:
+            print(e)
+            driver.quit()
+            print("There was some issue in logging in. Trying again...")
+            connect()
+    
+    except Exception as e:
+        print(e)
+        driver.quit()
+        print("There was some issue in logging in. Trying again...")
+        connect()
 
 
 def check_available_ssids():
@@ -183,7 +290,7 @@ def algo_windows():
             print(f"Connected to {available_its_ssids[0]} network")
             connect()
         except subprocess.CalledProcessError:
-            add_its_profile("ITS7000")
+            add_its_profile(available_its_ssids[0])
             connect()
     
 
