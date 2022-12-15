@@ -1,5 +1,29 @@
-import git
 from path import path
+from utility.install_package import install
+import urllib.request
+import json
+# check for git is installed
+try:
+    import git
+except ImportError as e:
+    print("Installing git")
+    install("GitPython")
+    import git
+# check if requests is installed
+try:
+    import requests
+except ImportError as e:
+    print("Installing requests")
+    install("requests")
+    import requests
+
+# check if packaging is installed
+try:
+    import packaging
+except ImportError as e:
+    print("Installing packaging")
+    install("packaging")
+    import packaging
 
 def update_script():
     print("Fetching updates from GithHub")
