@@ -214,6 +214,13 @@ def connect():
     check_credentials_file()
     user_auth = reading_credentials_file()
 
+    os.chdir(var_dir)
+    with open("var.txt","r") as f:
+        var_file_data = f.read()
+        count = re.search("Count" + " : (.*)", var_file_data)
+        count = count.group(1)
+    print("Login count: " + str(count))
+
     from selenium import webdriver
     from selenium.webdriver.common.keys import Keys
     from selenium.webdriver.common.by import By
@@ -229,8 +236,10 @@ def connect():
     with open("var.txt", "r") as f:
         var_file_data = f.read()
         load_page_time = re.search("Page Load Wait time" + " : (.*)", var_file_data)
-        print(int(load_page_time))
+        # print(int(load_page_time))
+        load_page_time = load_page_time.group(1)
         kill_page_time = re.search("Page kill time" + " : (.*)", var_file_data)
+        kill_page_time = kill_page_time.group(1)
 
     try:
         driver = webdriver.Chrome(f"{path}/chromedriver/chromedriver.exe")
