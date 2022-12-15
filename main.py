@@ -14,7 +14,7 @@ from utility.update_var import update_var
 
 # Importing algorithms
 
-# from windows.windows import algo_window
+from windows.windows import algo_windows
 from mac.mac import algo_mac
 # from linux.linux import algo_linux
 
@@ -98,7 +98,7 @@ def os_detect():
     os_name =platform.system()
     if os_name == "Windows":
         print("Executing algorithm for Windows")
-        # algo_window()
+        algo_windows()
     elif os_name == "Linux":
         print("Executing algorithm for Linux")
         # # algo_linux()

@@ -9,6 +9,7 @@ import copy
 
 from cryptography.fernet import Fernet
 
+sys.path.append(".")
 sys.path.append("..")
 
 from utility.check_internet import check_internet_windows
@@ -207,7 +208,6 @@ def reading_credentials_file():
     # pd = f.decrypt(user_auth["password"].encode()).decode()
     # print(pd)
     os.chdir(path)
-    print(user_auth)
     return user_auth
 
 def connect():
@@ -219,19 +219,34 @@ def connect():
     from selenium.webdriver.common.by import By
     from selenium.webdriver.support.wait import WebDriverWait
     from selenium.webdriver.support import expected_conditions as EC
+    from selenium.webdriver.chrome.options import Options
+    chrome_options = Options()
+    # Make the entire operation headless to reduce memory usage
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--window-size=1920,1080")
+
+    os.chdir(var_dir)
+    with open("var.txt", "r") as f:
+        var_file_data = f.read()
+        load_page_time = re.search("Page Load Wait time" + " : (.*)", var_file_data)
+        print(int(load_page_time))
+        kill_page_time = re.search("Page kill time" + " : (.*)", var_file_data)
 
     try:
         driver = webdriver.Chrome(f"{path}/chromedriver/chromedriver.exe")
         driver.get("https://192.168.1.250/connect")
 
-        # Below code block is used to bypass the warning issued by Chrome that the connection is not private and
-        adv_btn = driver.find_element(By.ID, "details-button")
-        adv_btn.click()
-        proceed_btn = driver.find_element(By.ID, "proceed-link")
-        proceed_btn.click()
-
         try:
+            # Below code block is used to bypass the warning issued by Chrome that the connection is not private and
             WebDriverWait(driver, 5).until(
+                EC.presence_of_element_located((By.ID, "details-button"))
+            )
+            adv_btn = driver.find_element(By.ID, "details-button")
+            adv_btn.click()
+            proceed_btn = driver.find_element(By.ID, "proceed-link")
+            proceed_btn.click()
+            
+            WebDriverWait(driver, load_page_time).until(
                 EC.presence_of_element_located((By.ID, "LoginUserPassword_auth_password"))
             )
             un = driver.find_element(By.ID, "LoginUserPassword_auth_username")
@@ -244,9 +259,13 @@ def connect():
             login = driver.find_element(By.ID, "UserCheck_Login_Button_span")
             login.click()
 
-            time.sleep(60)
+            time.sleep(kill_page_time)
 
-            print("Successfully logged in!")
+            if check_internet_windows():
+                print("Successfully logged in!")
+            else:
+                print("Login Failed. Logging in again...")
+                connect()
 
         except Exception as e:
             print(e)
