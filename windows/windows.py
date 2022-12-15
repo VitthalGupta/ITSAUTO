@@ -15,6 +15,9 @@ sys.path.append("..")
 from utility.check_internet import check_internet_windows
 from utility.install_package import install
 from utility.credentials import Credentials
+from utility.update_var import update_var
+from utility.fetch_data import fetch_var
+
 
 from path import path, var_dir, cred_dir
 
@@ -237,9 +240,9 @@ def connect():
         var_file_data = f.read()
         load_page_time = re.search("Page Load Wait time" + " : (.*)", var_file_data)
         # print(int(load_page_time))
-        load_page_time = load_page_time.group(1)
+        load_page_time = int(load_page_time.group(1))
         kill_page_time = re.search("Page kill time" + " : (.*)", var_file_data)
-        kill_page_time = kill_page_time.group(1)
+        kill_page_time = int(kill_page_time.group(1))
 
     try:
         driver = webdriver.Chrome(f"{path}/chromedriver/chromedriver.exe")
@@ -316,12 +319,19 @@ def algo_windows():
         try:
             subprocess.check_output(['netsh', 'wlan', 'connect', f'name={available_its_ssids[0]}'])
             print(f"Connected to {available_its_ssids[0]} network")
-            connect()
+            # connect()
         except subprocess.CalledProcessError:
             add_its_profile(available_its_ssids[0])
+            # connect()
+        while True:
             connect()
-    
-
+            count = int(fetch_var("Count"))
+            count += 1
+            # update count in var file
+            update_var("Count : {}".format(count - 1), "Count : {}".format(count))
+            # get the time duration from var file
+            login_time = fetch_var("Login time")
+            time.sleep(int(login_time))
 
 if __name__ == '__main__':
     algo_windows()
