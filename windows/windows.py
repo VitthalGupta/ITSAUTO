@@ -7,8 +7,6 @@ import getpass
 import time
 import copy
 
-from cryptography.fernet import Fernet
-
 sys.path.append(".")
 sys.path.append("..")
 
@@ -184,6 +182,8 @@ def reading_credentials_file():
     '''
     Read credentials file and return username and password
     '''
+    
+    from cryptography.fernet import Fernet
     cred_filename = "CredFile.ini"
     key_filename = "key.key"
     os.chdir(cred_dir)
