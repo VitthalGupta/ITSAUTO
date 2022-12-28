@@ -72,7 +72,7 @@ if first_time == "True":
 def os_detect():
     if os_name == "Windows":
         print("Executing algorithm for Windows")
-        # algo_window()
+        algo_windows()
     elif os_name == "Linux":
         print("Executing algorithm for Linux")
         algo_linux()

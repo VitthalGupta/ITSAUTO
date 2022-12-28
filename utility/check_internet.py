@@ -28,3 +28,10 @@ def check_internet(os_name):
         return check_internet_linux()
     if os_name == "Darwin":
         return check_internet_mac()
+def check_internet(os_name):
+    if os_name == "Windows":
+        return check_internet_win()
+    if os_name == "Linux":
+        return check_internet_linux()
+    if os_name == "Darwin":
+        return check_internet_mac()

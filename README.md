@@ -23,6 +23,7 @@ This repo will automate the authentication process for ITS for all available net
 - [pip](https://pip.pypa.io/en/stable/installing/)
 - [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 - [apt-get](https://help.ubuntu.com/community/AptGet/Howto)
+- [apt-get](https://help.ubuntu.com/community/AptGet/Howto)
 
 ### Windows
 
