@@ -1,8 +1,16 @@
 # ITSAUTO
 
-This repo will automate the authentication process for ITS for all available networks. We recommend you to ensure that 
+This repo will automate the authentication process for ITS for all available networks. We recommend you to ensure that all the required packages are installed. For OS specific instructions please refer to README.md files in the respective OS directories, or you can click on the links below.
 
-## Required Packages
+## OS Secific Instructions
+
+- [MAC Instructions](https://github.com/VitthalGupta/ITSAUTO/tree/main/mac)
+- [Windows Instructions](https://github.com/VitthalGupta/ITSAUTO/tree/main/windows)
+- [Linux Instructions](https://github.com/VitthalGupta/ITSAUTO/tree/main/linux)
+
+## Prerequisites for OS
+
+### Mac
 
 - [Python 3](https://www.python.org/)
 - [pip](https://pip.pypa.io/en/stable/installing/)
@@ -64,36 +72,35 @@ This repo will automate the authentication process for ITS for all available net
 
 # Directory Structure
 .
-├── CODE_OF_CONDUCT.md
-├── LICENSE
-├── README.md
-├── cleanup.py
-├── cred
-│   ├── CredFile.ini
-│   └── key.key
-├── linux
-│   ├── README.md
-│   └── linux.py
-├── mac
-│   ├── README.md
-│   └── mac.py
-├── main.py
-├── path.py
-├── utility
-│   ├── __init__.py
-│   ├── check_internet.py
-│   ├── credentials.py
-│   ├── fetch_data.py
-│   ├── install_package.py
-│   ├── update_script.py
-│   └── update_var.py
-├── var
-│   └── var.txt
-└── windows
-    ├── README.md
-    ├── __pycache__
-    │   └── windows.cpython-310.pyc
-    └── windows.py
+├── CODE_OF_CONDUCT.md \n
+├── LICENSE\n
+├── README.md \n
+├── cleanup.py\n
+├── cred\n
+│   ├── CredFile.ini\n
+│   └── key.key\n
+├── linux\n
+│   ├── README.md\n
+│   └── linux.py\n
+├── mac\n
+│   ├── README.md\n
+│   └── mac.py\n
+├── main.py\n
+├── path.py\n
+├── utility\n
+│   ├── __init__.py\n
+│   ├── check_internet.py\n
+│   ├── credentials.py\n
+│   ├── fetch_data.py\n
+│   ├── install_package.py\n
+│   ├── update_script.py\n
+│   └── update_var.py\n
+├── var\n
+│   └── var.txt\n
+└── windows\n
+    ├── README.md\n
+    │   └── windows.cpython-310.pyc\n
+    └── windows.py\n
 
 10 directories, 33 files
 

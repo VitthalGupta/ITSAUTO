@@ -10,9 +10,10 @@ from utility.check_internet import check_internet_mac
 from utility.credentials import Credentials
 from utility.update_var import update_var
 from utility.fetch_data import fetch_var
+from utility.check_connection import check_wifi_connection_mac
 
 # get the dir route to main var file
-from path import path, var_dir
+from path import path
 
 def algo_mac():
 
@@ -36,7 +37,15 @@ def algo_mac():
         from selenium.webdriver.support.ui import WebDriverWait
         # update the variable file
         update_var("Selenium installed : False", "Selenium installed : True")
-
+    
+    # Check if tddm is installed
+    try:
+        from tqdm import tqdm
+    except ImportError as e:
+        print("installing tqdm")
+        install("tqdm")
+        from tqdm import tqdm
+    
     #Check if Cryptography is installed
     try:
         from cryptography.fernet import Fernet
@@ -50,6 +59,8 @@ def algo_mac():
         update_var("Cryptography installed : False", "Cryptography installed : True")
 
     def login_mac():
+        # check wifi for mac
+        check_wifi_connection_mac()
         #fetch count from var file
         count = fetch_var("Count")
         print("Login count: " + str(count))
@@ -85,12 +96,12 @@ def algo_mac():
         driver.get("https://192.168.1.250/connect")
         # wait for the page to load
         # fetch load page time from the var file
-        load_page_time = fetch_var("Page Load Wait time")
+        load_page_wait_time = fetch_var("Page Load Wait time")
         # time.sleep(int(load_page_time))
         # print(load_page_time)
         # reload if the page is not loaded within load_page_time secs
         try:
-            WebDriverWait(driver, int(load_page_time)).until(
+            WebDriverWait(driver, int(load_page_wait_time)).until(
                 lambda driver: driver.find_element("id", "LoginUserPassword_auth_username"))
             # find the username field
             username = driver.find_element("id","LoginUserPassword_auth_username")
@@ -117,7 +128,7 @@ def algo_mac():
         except:
             driver.quit()
             os.chdir(path)
-            print("Page not loaded within {} secs".format(load_page_time))
+            print("Page not loaded within {} secs".format(load_page_wait_time))
             print("Reloading the page")
             login_mac()
 
@@ -147,8 +158,9 @@ def algo_mac():
         print(_)
     if only_its==[]:
         print("No ITS SSID's Found")
-        print("Exiting")
-        sys.exit()
+        print("Rechecking in 5 secs")
+        time.sleep(5)
+        algo_mac()
     else:
         # Fetching SSID from the var file
         if len(only_its) >= 1:
@@ -169,18 +181,25 @@ def algo_mac():
         for _ in network_connected:
             if (_.find("ITS") != -1):
                 network_connected = _.replace(" ", "")
-        print(network_connected)
-        if len(network_connected)>=1:
-            network_connected = network_connected.split(":")
+        # if len(network_connected)>=1:
+        #     for i in network_connected:
+        #         print(type(network_connected))
+        #         print(network_connected)
+        #         print(type(i.split(":")))
+        #         # print
+        #         network_connected.extend(i.split(":"))
+                # network_connected.append(i.split(":"))
         if preferred_network in network_connected:
-            print("Already connected to the preferred network: {}".format(network_connected[1]))
+            print("Already connected to the preferred network: {}".format(network_connected))
         else:
             if len(only_its) != 0:
                 subprocess.check_output(
                     ['networksetup', '-setairportnetwork', 'en0', network_to_connect, 'iiitbbsr'])
                 print("Connected to : {} ".format(network_to_connect))
             else: 
-                print("No ITS available")
+                print("No ITS SSID's found")
+                print("Rechecking in 5 secs")
+                time.sleep(5)
                 algo_mac()
 
 
@@ -226,4 +245,16 @@ def algo_mac():
         update_var("Count : {}".format(count - 1), "Count : {}".format(count))
         # get the time duration from var file
         login_time = fetch_var("Login time")
-        time.sleep(int(login_time))
+        # Adding a for loop with tqdm to create a progress bar
+        count_net = 0
+        for i in tqdm(range(int(login_time))):
+            # time.sleep(1)
+            if check_internet_mac():
+                time.sleep(1)
+                if count_net>0:
+                    count_net-=1
+            else:
+                count_net+=1
+            if count_net>3:
+                login_mac()
+        # time.sleep(int(login_time))
