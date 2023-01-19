@@ -10,7 +10,7 @@ import copy
 sys.path.append(".")
 sys.path.append("..")
 
-from utility.check_internet import check_internet_windows
+from utility.check_internet import check_internet_win
 from utility.install_package import install
 from utility.credentials import Credentials
 from utility.update_var import update_var
@@ -24,20 +24,6 @@ def setup():
     '''
     This function is used to setup the script and install required dependencies when invoked for the first time on user's system.
     '''
-    print("Checking dependencies...")
-
-    # Creating a variable to store whether the algorithm is connected for the first time
-    # var_dir = os.path.join(path, "var")
-    if os.path.exists(var_dir):
-        pass
-    else:
-        print(var_dir)
-        os.mkdir(var_dir)
-        os.chdir(var_dir)
-        var_file= open("var.txt","w")
-        var_file.write("Packages installed : False\nSelenium installed : False\nCryptography installed : False\nWget installed : False\nChrome driver installed : False\nChrome installed : False\nSafari driver installed : False\nSafari installed : False\nFirefox driver installed : False\nFirefox installed : False\nInternet connection : False\nSafari Driver Enabled: False")
-        var_file.close()
-        os.chdir(path)
 
     def check_true_dependencies():
         with open(f"{var_dir}/var.txt", "r") as f:
@@ -46,9 +32,9 @@ def setup():
                     return False
             return True
             
-    if check_true_dependencies() == True:
+    if check_true_dependencies():
         pass
-    elif check_internet_windows() == True:
+    elif check_internet_win():
         print("Connected to internet. Checking for missing dependencies")
     else:
         print("An internet connection is required to install. Kindly connect to the internet and try again.")
@@ -60,22 +46,12 @@ def setup():
         from selenium.webdriver.common.by import By
         from selenium.webdriver.common.keys import Keys
 
-
     except ImportError:
-        print("Selenium not installed")
         print("Installing Selenium")
         install("selenium")
     
     finally:
-        os.chdir(var_dir)
-        with open("var.txt","r") as f:
-            file_data = f.read()
-            if(re.search("Selenium installed : False", file_data)):
-                file_data = re.sub("Selenium installed : False", "Selenium installed : True", file_data)
-        
-        with open("var.txt", "w") as f:
-            f.write(file_data)
-        os.chdir(path)
+        update_var("Selenium installed : False", "Selenium installed : True")
 
     # checking for Cryptography package installed
     try:
@@ -85,33 +61,15 @@ def setup():
         print("Installing Cryptography")
         install("cryptography")
     finally:
-        os.chdir(var_dir)
-        with open("var.txt","r") as f:
-            file_data = f.read()
-            if(re.search("Cryptography installed : False", file_data)):
-                file_data = re.sub("Cryptography installed : False", "Cryptography installed : True", file_data)
-        
-        with open("var.txt", "w") as f:
-            f.write(file_data)
-        os.chdir(path)
-
-    # checking for wget package installed
-    # try:
-    #     import wget
-    # except ImportError:
-    #     print("Wget not installed")
-    #     print("Installing Wget")
-    #     install("wget")
-    # finally:
-    #     os.chdir(var_dir)
-    #     with open("var.txt","r") as f:
-    #         file_data = f.read()
-    #         if(re.search("Wget installed : False", file_data)):
-    #             file_data = re.sub("Wget installed : False", "Wget installed : True", file_data)
-        
-    #     with open("var.txt", "w") as f:
-    #         f.write(file_data)
-    #     os.chdir(path)
+        update_var("Cryptography installed : False", "Cryptography installed : True")
+    
+    # checking for tqdm
+    try:
+        from tqdm import tqdm
+    except:
+        print("Installing tqdm")
+        install("tqdm")
+        from tqdm import tqdm
     
     # checking if Chromedriver is available or not
     if os.path.exists(f"{path}/chromedriver/chromedriver.exe"):
@@ -128,9 +86,10 @@ def setup():
         print("Extracting Chrome Driver")
         with zipfile.ZipFile("chromedriver.zip", 'r') as zip_ref:
             zip_ref.extractall("chromedriver")
-
         os.remove("chromedriver.zip")
-
+    
+    # Updating Packages installed variable
+    update_var("Packages installed : False", "Packages installed : True")
 
 def add_its_profile(ssid, key="iiitbbsr"):
     '''
@@ -190,9 +149,7 @@ def reading_credentials_file():
 
     with open(key_filename, 'r') as key_f:
         key = key_f.read().encode()
-    
     f = Fernet(key)
-
     with open(cred_filename, 'r') as cred_f:
         cred_lines = cred_f.readlines()
         user_auth = {}
@@ -235,14 +192,9 @@ def connect():
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--window-size=1920,1080")
 
-    os.chdir(var_dir)
-    with open("var.txt", "r") as f:
-        var_file_data = f.read()
-        load_page_time = re.search("Page Load Wait time" + " : (.*)", var_file_data)
-        # print(int(load_page_time))
-        load_page_time = int(load_page_time.group(1))
-        kill_page_time = re.search("Page kill time" + " : (.*)", var_file_data)
-        kill_page_time = int(kill_page_time.group(1))
+    load_page_time = fetch_var("Page Load Wait time")
+    kill_page_time = fetch_var("Page kill time")
+    
 
     try:
         driver = webdriver.Chrome(f"{path}/chromedriver/chromedriver.exe")
@@ -250,7 +202,7 @@ def connect():
 
         try:
             # Below code block is used to bypass the warning issued by Chrome that the connection is not private and
-            WebDriverWait(driver, 5).until(
+            WebDriverWait(driver, int(load_page_time)).until(
                 EC.presence_of_element_located((By.ID, "details-button"))
             )
             adv_btn = driver.find_element(By.ID, "details-button")
@@ -271,9 +223,9 @@ def connect():
             login = driver.find_element(By.ID, "UserCheck_Login_Button_span")
             login.click()
 
-            time.sleep(kill_page_time)
+            time.sleep(int(kill_page_time))
 
-            if check_internet_windows():
+            if check_internet_win():
                 print("Successfully logged in!")
             else:
                 print("Login Failed. Logging in again...")
@@ -311,7 +263,12 @@ def check_available_ssids():
     return available_its_ssids
 
 def algo_windows():
-    setup()
+    from tqdm import tqdm
+    package_status = fetch_var("Packages installed")
+    if package_status == "True":
+        pass
+    else:
+        setup()
     available_its_ssids = check_available_ssids()
     if(len(available_its_ssids)) == 0:
         print("No ITS networks found")
@@ -325,13 +282,26 @@ def algo_windows():
             # connect()
         while True:
             connect()
+                # update count from var file
             count = int(fetch_var("Count"))
             count += 1
             # update count in var file
             update_var("Count : {}".format(count - 1), "Count : {}".format(count))
             # get the time duration from var file
             login_time = fetch_var("Login time")
-            time.sleep(int(login_time))
+            # Adding a for loop with tqdm to create a progress bar
+            count_net = 0
+            for i in tqdm(range(int(login_time))):
+                # time.sleep(1)
+                if check_internet_win():
+                    time.sleep(1)
+                    if count_net > 0:
+                        count_net -= 1
+                else:
+                    count_net += 1
+                if count_net > 3:
+                    connect()
+            # time.sleep(int(login_time))
 
 if __name__ == '__main__':
     algo_windows()

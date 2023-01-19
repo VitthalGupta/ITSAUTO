@@ -38,7 +38,7 @@ def algo_mac():
         # update the variable file
         update_var("Selenium installed : False", "Selenium installed : True")
     
-    # Check if tddm is installed
+    # Check if tqdm is installed
     try:
         from tqdm import tqdm
     except ImportError as e:
@@ -103,6 +103,7 @@ def algo_mac():
         try:
             WebDriverWait(driver, int(load_page_wait_time)).until(
                 lambda driver: driver.find_element("id", "LoginUserPassword_auth_username"))
+            time.sleep(2)
             # find the username field
             username = driver.find_element("id","LoginUserPassword_auth_username")
             # enter the username
@@ -227,7 +228,7 @@ def algo_mac():
         cred.create_cred()
 
     # Update var file for install all packages
-    update_var("Install all packages : False", "Install all packages : True")
+    update_var("Packages installed : False", "Packages installed : True")
     
     # Update var file for safari driver
     update_var("Safari driver installed : False", "Safari driver installed : True")
@@ -258,3 +259,5 @@ def algo_mac():
             if count_net>3:
                 login_mac()
         # time.sleep(int(login_time))
+if __name__ == '__main__':
+    algo_mac()

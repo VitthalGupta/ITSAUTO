@@ -44,69 +44,70 @@ This repo will automate the authentication process for ITS for all available net
 
 ## Working -
 
-# Step 1
+### Step 1
 
  > Detects the OS and installs the required dependencies.
 
-# Step 2
+### Step 2
 
-> Detection of compatible network: <br>
+> Detection of compatible network: <br\>
 > &nbsp; &nbsp; This process checks whether there is a compatible wifi connection available in proximity. In our use case this refers to any SSID with the prefix of "ITS".
 
-# Step 3
+### Step 3
 
- > Connection to wifi: The algorithm followed here is, if the system finds a single SSID with the prefix ITS, then the application will check for the BSSID of the router having the strongest signal strength to the device.<br>
+ > Connection to wifi: The algorithm followed here is, if the system finds a single SSID with the prefix ITS, then the application will check for the BSSID of the router having the strongest signal strength to the device.<br\>
  > If your device can find multiple SSID's with the aforementioned prefix then the application will compare the signal strength of all the relevant BSSID's and then compare among the SSID's, this would determine the best SSID for connection. Then the router can be connected.
 
-# Step 4
+### Step 4
 
  > Initialization of selenium and chrome driver module: This module will then initiate a headless chrome driver, the login id and the password would then be filled in the respective fields. After connecting the driver's tab will be closed.
 
-# Step 5
+### Step 5
 
-  > Reconnection after 5 mins: <br>
+  > Reconnection after 5 mins: <br\>
   > This part would comprise of logging out of the network, by initializing the logout command in the url and connecting back using step 3.
 
-## Note:
+### Important Note
 
  > Reconnection of wifi network connection may be applicable in case a better connection is discovered (in terms of signal of BSSID for the various SSID's available.)
 
-# Directory Structure
+## Directory Structure
+
 .
-├── CODE_OF_CONDUCT.md \n
-├── LICENSE\n
-├── README.md \n
-├── cleanup.py\n
-├── cred\n
-│   ├── CredFile.ini\n
-│   └── key.key\n
-├── linux\n
-│   ├── README.md\n
-│   └── linux.py\n
-├── mac\n
-│   ├── README.md\n
-│   └── mac.py\n
-├── main.py\n
-├── path.py\n
-├── utility\n
-│   ├── __init__.py\n
-│   ├── check_internet.py\n
-│   ├── credentials.py\n
-│   ├── fetch_data.py\n
-│   ├── install_package.py\n
-│   ├── update_script.py\n
-│   └── update_var.py\n
-├── var\n
-│   └── var.txt\n
-└── windows\n
-    ├── README.md\n
-    │   └── windows.cpython-310.pyc\n
-    └── windows.py\n
+├── CODE_OF_CONDUCT.md \
+├── LICENSE\
+├── README.md \
+├── cleanup.py\
+├── cred\
+│   ├── CredFile.ini\
+│   └── key.key\
+├── linux\
+│   ├── README.md\
+│   └── linux.py\
+├── mac\
+│   ├── README.md\
+│   └── mac.py\
+├── main.py\
+├── path.py\
+├── utility\
+│   ├── __init__.py\
+│   ├── check_internet.py\
+│   ├── credentials.py\
+│   ├── fetch_data.py\
+│   ├── install_package.py\
+│   ├── update_script.py\
+│   └── update_var.py\
+├── var\
+│   └── var.txt\
+└── windows\
+    ├── README.md\
+    │   └── windows.cpython-310.pyc\
+    └── windows.py\
 
 10 directories, 33 files
 
-## Developed by : -
+## Developed by
 
-Vitthal Gupta - b319063@iiit-bh.ac.in <br> [Github](https://github.com/VitthalGupta) <br> [LinkedIn](https://www.linkedin.com/in/vitthal-g-0a0717b8/)
+Vitthal Gupta - b319063@iiit-bh.ac.in <br\> [Github](https://github.com/VitthalGupta) <br\> [LinkedIn](https://www.linkedin.com/in/vitthal-g-0a0717b8/)
 
-Bignesh Sahoo - b319013@iiit-bh.ac.in <br> [Github](https://github.com/bigsbunny) <br> [LinkedIn](https://www.linkedin.com/in/bighnesh-sahoo/)
+Bignesh Sahoo - b319013@iiit-bh.ac.in <br\> [Github](https://github.com/bigsbunny) <br\> [LinkedIn](https://www.linkedin.com/in/bighnesh-sahoo/)

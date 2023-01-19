@@ -8,7 +8,13 @@ def fetch_var(var):
     var_file = open("var.txt", "r")
     var_file_data = var_file.read()
     var_file.close()
-    var = re.search(var + " : (.*)", var_file_data)
-    var = var.group(1)
-    os.chdir(path)
-    return var
+    try:
+        var = re.search(var + " : (.*)", var_file_data)
+        var = var.group(1)
+        os.chdir(path)
+        return var
+    except Exception as e:
+        print("Error found")
+        print(e)
+        print("To avoid this error in the future please run : ")
+        print("python reset.py")

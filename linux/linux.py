@@ -37,6 +37,14 @@ def algo_linux():
         from selenium.webdriver.support.ui import WebDriverWait
         # update the variable file
         update_var("Selenium installed : False", "Selenium installed : True")
+    
+    # Check if tqdm is installed
+    try:
+        from tqdm import tqdm
+    except ImportError as e:
+        print("installing tqdm")
+        install("tqdm")
+        from tqdm import tqdm
 
     #Check if Cryptography is installed
     try:
@@ -126,6 +134,7 @@ def algo_linux():
         try:
             WebDriverWait(driver, int(load_page_time)).until(
                 lambda driver: driver.find_element("id", "LoginUserPassword_auth_username"))
+            time.sleep(2)
             username = driver.find_element(
                 "id", "LoginUserPassword_auth_username")
             # enter the username
@@ -167,6 +176,65 @@ def algo_linux():
             available_its.append(_.replace(" ", ""))
         #print(available_its)
 
+       #filtering data
+    only_its = []
+    its = []
+    for _ in available_its:
+        its = _.split("-")
+        if its[0] not in only_its:
+            only_its.append(its[0])
+
+    # Printing availble SSID's
+    print("Available SSID'S: ")
+    for _ in only_its:
+        print(_)
+
+    if only_its == []:
+        print("No ITS SSID's Found")
+        print("Rechecking in 5 secs")
+        time.sleep(5)
+        algo_linux()
+    else:
+        # Fetching SSID from the var file
+        if len(only_its) >= 1:
+            network_to_connect = only_its[0]
+        # Get preferred network from the var file
+        preferred_network = fetch_var("Preferred network")
+        # print("preferred network : ", preferred_network )
+        if preferred_network in only_its:
+            network_to_connect = preferred_network
+
+        # Connect to the network {networksetup -setairportnetwork en0 <SSID_OF_NETWORK> <PASSWORD>}
+        # only_its in not empty
+        # check if the network is already connected to the prefered network
+        network_connected = subprocess.check_output(
+            ["/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport", "-I", "|", "awk", "'/", "SSID:/", "{print $2}'"])
+        network_connected = network_connected.decode('ascii')
+        network_connected = network_connected.split("\n")
+        for _ in network_connected:
+            if (_.find("ITS") != -1):
+                network_connected = _.replace(" ", "")
+        # if len(network_connected)>=1:
+        #     for i in network_connected:
+        #         print(type(network_connected))
+        #         print(network_connected)
+        #         print(type(i.split(":")))
+        #         # print
+        #         network_connected.extend(i.split(":"))
+                # network_connected.append(i.split(":"))
+        if preferred_network in network_connected:
+            print("Already connected to the preferred network: {}".format(
+                network_connected))
+        else:
+            if len(only_its) != 0:
+                subprocess.check_output(
+                    ['networksetup', '-setairportnetwork', 'en0', network_to_connect, 'iiitbbsr'])
+                print("Connected to : {} ".format(network_to_connect))
+            else:
+                print("No ITS SSID's found")
+                print("Rechecking in 5 secs")
+                time.sleep(5)
+                algo_linux()
      # Checking if credentials are present
     os.chdir(path)
     cred_file = "cred"
@@ -189,3 +257,38 @@ def algo_linux():
         cred.username = input("Enter your username: ")
         cred.password = getpass.getpass("Enter your password: ")
         cred.create_cred()
+# Update var file for install all packages
+    update_var("Install all packages : False", "Install all packages : True")
+
+    # Update var file for safari driver
+    update_var("Chrome driver installed : False",
+               "Chrome driver installed : True")
+
+    # Update var file for safari browser
+    update_var("Chrome installed : False", "Chrome installed : True")
+
+    # logging in every login_time seconds
+    while True:
+        login_linux()
+        # update count from var file
+        count = int(fetch_var("Count"))
+        count += 1
+        # update count in var file
+        update_var("Count : {}".format(count - 1), "Count : {}".format(count))
+        # get the time duration from var file
+        login_time = fetch_var("Login time")
+        # Adding a for loop with tqdm to create a progress bar
+        count_net = 0
+        for i in tqdm(range(int(login_time))):
+            # time.sleep(1)
+            if check_internet_linux():
+                time.sleep(1)
+                if count_net > 0:
+                    count_net -= 1
+            else:
+                count_net += 1
+            if count_net > 3:
+                login_linux()
+        # time.sleep(int(login_time))
+if __name__ == '__main__':
+    algo_linux()

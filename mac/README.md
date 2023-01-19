@@ -4,6 +4,7 @@
 
 * [Cryptography](https://pypi.org/project/cryptography/)
 * [Selenium](https://pypi.org/project/selenium/)
+* [tqdm](https://pypi.org/project/tqdm/)
 
 ## Macintosh Specific Instructions and Troubleshooting
 
@@ -25,10 +26,9 @@ Authorize safaridriver to launch the XPC service that hosts the local web server
 
 > Note: Python 3.10.3 is the latest version of Python 3 that is supported by Selenium. If you have a newer version of Python 3 installed, you will need to install Python 3.7.3.
 
-### Tips and further improvments:
+### Tips and further improvments
 
 * Optimize the wait login wait time according to your specific needs.
 
 * We will roll out a feature to automatically optimise the wait time for relogin based on logs.
-
-* 
+[EOF]
