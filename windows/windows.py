@@ -15,6 +15,7 @@ from utility.install_package import install
 from utility.credentials import Credentials
 from utility.update_var import update_var
 from utility.fetch_data import fetch_var
+from utility.check_connection import check_wifi_connection_win
 
 
 from path import path, var_dir, cred_dir
@@ -171,6 +172,9 @@ def reading_credentials_file():
     return user_auth
 
 def connect():
+    # check if the wifi is connected to ITS
+    check_wifi_connection_win()
+    # check if the credentials file exists
     check_credentials_file()
     user_auth = reading_credentials_file()
 

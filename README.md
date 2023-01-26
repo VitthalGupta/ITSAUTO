@@ -64,8 +64,8 @@ This repo will automate the authentication process for ITS for all available net
 
 ### Step 5
 
-  > Reconnection after 5 mins: <br\>
-  > This part would comprise of logging out of the network, by initializing the logout command in the url and connecting back using step 3.
+  > Reconnection after 12 hours: <br\>
+  > This process will ensure that there is a proper internet connection available, if not then the application will try to reconnect to the wifi network. This process will be repeated every 12 hours. During this time the application will also check for any updates to the script and will update the script if any updates are available. It will also reconnect to the wifi network if the connection is lost.
 
 ### Important Note
 
@@ -108,6 +108,12 @@ This repo will automate the authentication process for ITS for all available net
 
 ## Developed by
 
-Vitthal Gupta - b319063@iiit-bh.ac.in <br\> [Github](https://github.com/VitthalGupta) <br\> [LinkedIn](https://www.linkedin.com/in/vitthal-g-0a0717b8/)
+Vitthal Gupta - b319063@iiit-bh.ac.in
+[![Github](<https://skillicons.dev/icons?i=github>)](https://github.com/VitthalGupta)  
+[![LinkedIn](<https://skillicons.dev/icons?i=linkedin>)](<https://www.linkedin.com/in/vitthal-g-0a0717b8/>)
 
-Bignesh Sahoo - b319013@iiit-bh.ac.in <br\> [Github](https://github.com/bigsbunny) <br\> [LinkedIn](https://www.linkedin.com/in/bighnesh-sahoo/)
+Bignesh Sahoo - b319013@iiit-bh.ac.in  
+[![Github](<https://skillicons.dev/icons?i=github>)](<https://github.com/bigsbunny>)
+[![LinkedIn](<https://skillicons.dev/icons?i=linkedin>)](<https://www.linkedin.com/in/bignesh-sahoo-2b5b3b1b4/>)
+
+[EOF]

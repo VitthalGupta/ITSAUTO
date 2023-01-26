@@ -10,6 +10,7 @@ from utility.check_internet import check_internet_linux
 from utility.credentials import Credentials
 from utility.update_var import update_var
 from utility.fetch_data import fetch_var
+from utility.check_connection import check_wifi_connection_linux
 
 # get the dir route to main var file
 from path import path, var_dir
@@ -91,6 +92,9 @@ def algo_linux():
         update_var("Chrome installed : False", "Chrome installed : True")
     
     def login_linux():
+        # check if wifi is connected 
+        check_wifi_connection_linux()
+        
         #fetch count from var file
         count = fetch_var("Count")
         print("Login count: " + str(count))
@@ -167,8 +171,10 @@ def algo_linux():
     
     # check available networks in linux
     available_its =[]
-    devices = subprocess.check_output(
-        ["/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport", '-s'])
+    # check devices using nmcli
+    devices = subprocess.check_output(["nmcli", "dev", "wifi"])
+    # devices = subprocess.check_output(
+    #     ["/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport", '-s'])
     devices = devices.decode('ascii')
     devices = devices.split("\n")
     for _ in devices:
@@ -206,9 +212,11 @@ def algo_linux():
 
         # Connect to the network {networksetup -setairportnetwork en0 <SSID_OF_NETWORK> <PASSWORD>}
         # only_its in not empty
-        # check if the network is already connected to the prefered network
+        # check if the network is already connected to the prefered network For linux using nmcli
         network_connected = subprocess.check_output(
-            ["/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport", "-I", "|", "awk", "'/", "SSID:/", "{print $2}'"])
+            ["nmcli", "connection", "show", "--active"])
+        # network_connected = subprocess.check_output(
+        #     ["/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport", "-I", "|", "awk", "'/", "SSID:/", "{print $2}'"])
         network_connected = network_connected.decode('ascii')
         network_connected = network_connected.split("\n")
         for _ in network_connected:
@@ -227,8 +235,10 @@ def algo_linux():
                 network_connected))
         else:
             if len(only_its) != 0:
-                subprocess.check_output(
-                    ['networksetup', '-setairportnetwork', 'en0', network_to_connect, 'iiitbbsr'])
+                # connect to the network from a linux terminal from subprocess using nmcli
+                subprocess.call(['nmcli', 'device', 'wifi', 'connect', network_to_connect, 'password', 'iiitbbsr'])
+                # subprocess.check_output(
+                #     ['networksetup', '-setairportnetwork', 'en0', network_to_connect, 'iiitbbsr'])
                 print("Connected to : {} ".format(network_to_connect))
             else:
                 print("No ITS SSID's found")
