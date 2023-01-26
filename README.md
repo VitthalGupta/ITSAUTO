@@ -108,8 +108,8 @@ This repo will automate the authentication process for ITS for all available net
 
 ## Developed by
 
-Vitthal Gupta - b319063@iiit-bh.ac.in \ [![Github](<https://skillicons.dev/icons?i=github>)](https://github.com/VitthalGupta)  [![LinkedIn](<https://skillicons.dev/icons?i=linkedin>) }(<https://www.linkedin.com/in/vitthal-g-0a0717b8/>)
+Vitthal Gupta - b319063@iiit-bh.ac.in \ [![Github](<https://skillicons.dev/icons?i=github>)](https://github.com/VitthalGupta)  [![LinkedIn](<https://skillicons.dev/icons?i=linkedin>)](<https://www.linkedin.com/in/vitthal-g-0a0717b8/>)
 
-Bignesh Sahoo - b319013@iiit-bh.ac.in \ [![Github](<https://skillicons.dev/icons?i=github>)](https://github.com/bigsbunny) [![LinkedIn](<https://skillicons.dev/icons?i=linkedin>) }(<https://www.linkedin.com/in/bignesh-sahoo-2b5b3b1b4/>)
+Bignesh Sahoo - b319013@iiit-bh.ac.in \ [![Github](<https://skillicons.dev/icons?i=github>)](https://github.com/bigsbunny) [![LinkedIn](<https://skillicons.dev/icons?i=linkedin>)] (<https://www.linkedin.com/in/bignesh-sahoo-2b5b3b1b4/>)
 
 [EOF]
