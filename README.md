@@ -114,6 +114,6 @@ Vitthal Gupta - b319063@iiit-bh.ac.in
 
 Bignesh Sahoo - b319013@iiit-bh.ac.in  
 [![Github](<https://skillicons.dev/icons?i=github>)](<https://github.com/bigsbunny>)
-[! [LinkedIn](<https://skillicons.dev/icons?i=linkedin>)] (<https://www.linkedin.com/in/bignesh-sahoo-2b5b3b1b4/>)
+[![LinkedIn](<https://skillicons.dev/icons?i=linkedin>)](<https://www.linkedin.com/in/bignesh-sahoo-2b5b3b1b4/>)
 
 [EOF]
