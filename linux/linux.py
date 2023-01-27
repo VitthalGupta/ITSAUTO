@@ -122,10 +122,10 @@ def algo_linux():
         # launch chrome web driver
         chrome_driver = os.path.join(path, "chromedriver")
         os.chdir(chrome_driver)
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--window-size=1920x1080")
-        driver = webdriver.Chrome(options=chrome_options)
+        # chrome_options = Options()
+        # chrome_options.add_argument("--headless")
+        # chrome_options.add_argument("--window-size=1920x1080")
+        driver = webdriver.Chrome()
         os.chdir(path)
         driver.get("https://192.168.1.250/connect")
         # wait for the page to load
@@ -137,8 +137,15 @@ def algo_linux():
 
         try:
             WebDriverWait(driver, int(load_page_time)).until(
-                lambda driver: driver.find_element("id", "LoginUserPassword_auth_username"))
+                lambda driver: driver.find_element("id", "details-button"))
+            # click on advanced button
+            advanced = driver.find_element("id", "details-button")
+            advanced.click()
+            #click on proceed to unsafe site
+            proceed = driver.find_element("id", "proceed-link")
+            proceed.click()
             time.sleep(2)
+            # find the username field
             username = driver.find_element(
                 "id", "LoginUserPassword_auth_username")
             # enter the username
@@ -172,7 +179,8 @@ def algo_linux():
     # check available networks in linux
     available_its =[]
     # check devices using nmcli
-    devices = subprocess.check_output(["nmcli", "dev", "wifi"])
+    #devices = subprocess.check_output(["nmcli", "dev", "wifi"])
+    devices = subprocess.check_output(["iwlist", "scan"])
     # devices = subprocess.check_output(
     #     ["/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport", '-s'])
     devices = devices.decode('ascii')
