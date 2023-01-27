@@ -74,8 +74,9 @@ def check_wifi_connection_mac():
 def check_wifi_connection_linux():
     # Check available connections
     available_its = []
-    devices = subprocess.check_output(
-        ["nmcli", "dev", "wifi"])
+    # devices = subprocess.check_output(
+    #     ["nmcli", "dev", "wifi"])
+    devices = subprocess.check_output(["iwlist", "scan"])
     devices = devices.decode('ascii')
     devices = devices.split("\n")
     for _ in devices:
@@ -112,8 +113,10 @@ def check_wifi_connection_linux():
         # Connect to the network {networksetup -setairportnetwork en0 <SSID_OF_NETWORK> <PASSWORD>}
         # only_its in not empty
         # check if the network is already connected to the prefered network
-        network_connected = subprocess.check_output(
-            ["nmcli", "dev", "wifi"])
+        # network_connected = subprocess.check_output(
+        #     ["nmcli", "dev", "wifi"])
+        network_connected = subprocess.check_output(["nmcli", "connection", "show", "--active"])
+        # network_connected = subprocess.check_output(["iwlist", "scan"])
         network_connected = network_connected.decode('ascii')
         network_connected = network_connected.split("\n")
         for _ in network_connected:
@@ -131,7 +134,7 @@ def check_wifi_connection_linux():
         else:
             if len(only_its) != 0:
                 subprocess.check_output(
-                    ['nmcli', 'dev', 'wifi', 'connect', network_to_connect, 'password', 'iiitbbsr'])
+                    ['nmcli', 'dev', 'wifi', 'connect', preferred_network, 'password', 'iiitbbsr'])
                 # print("Connected to : {} ".format(network_to_connect))
             else:
                 print("No ITS SSID's found")

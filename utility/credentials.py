@@ -63,7 +63,7 @@ class Credentials():
             if (os_name == "Windows"):
                 os.system("attrib +h key.key")
             elif (os_name == "Linux"):
-                os.system("mv key.key .key.key")
+                os.system("mv key.key key.key")
             elif (os_name == "Darwin"):
                 os.system("setfile -a V key.key")
 
