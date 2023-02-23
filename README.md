@@ -73,47 +73,48 @@ This repo will automate the authentication process for ITS for all available net
 
 ## Directory Structure
 
+'''bash
 .
-├── CODE_OF_CONDUCT.md \
-├── LICENSE\
-├── README.md \
-├── cleanup.py\
-├── cred\
-│   ├── CredFile.ini\
-│   └── key.key\
-├── linux\
-│   ├── README.md\
-│   └── linux.py\
-├── mac\
-│   ├── README.md\
-│   └── mac.py\
-├── main.py\
-├── path.py\
-├── utility\
-│   ├── __init__.py\
-│   ├── check_internet.py\
-│   ├── credentials.py\
-│   ├── fetch_data.py\
-│   ├── install_package.py\
-│   ├── update_script.py\
-│   └── update_var.py\
-├── var\
-│   └── var.txt\
-└── windows\
-    ├── README.md\
-    │   └── windows.cpython-310.pyc\
-    └── windows.py\
+├── CODE_OF_CONDUCT.md 
+├── LICENSE
+├── README.md
+├── cleanup.py
+├── cred
+│   ├── CredFile.ini
+│   └── key.key
+├── linux
+│   ├── README.md
+│   └── linux.py
+├── mac
+│   ├── README.md
+│   └── mac.py
+├── main.py
+├── path.py
+├── utility
+│   ├── __init__.py
+│   ├── check_internet.py
+│   ├── credentials.py
+│   ├── fetch_data.py
+│   ├── install_package.py
+│   ├── update_script.py
+│   └── update_var.py
+├── var
+│   └── var.txt
+└── windows
+    ├── README.md
+    │   └── windows.cpython-310.pyc
+    └── windows.py
 
 10 directories, 33 files
 
+'''
+
 ## Developed by
 
-Vitthal Gupta - b319063@iiit-bh.ac.in
-[![Github](<https://skillicons.dev/icons?i=github>)](https://github.com/VitthalGupta)  
-[![LinkedIn](<https://skillicons.dev/icons?i=linkedin>)](<https://www.linkedin.com/in/vitthal-g-0a0717b8/>)
+<a href="https://github.com/VitthalGupta/ITSAUTO/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=VitthalGupta/ITSAUTO" />
+</a>
 
-Bignesh Sahoo - b319013@iiit-bh.ac.in  
-[![Github](<https://skillicons.dev/icons?i=github>)](<https://github.com/bigsbunny>)
-[![LinkedIn](<https://skillicons.dev/icons?i=linkedin>)](<https://www.linkedin.com/in/bignesh-sahoo-2b5b3b1b4/>)
+Made with [contrib.rocks](https://contrib.rocks).
 
 [EOF]

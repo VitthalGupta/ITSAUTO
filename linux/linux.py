@@ -171,10 +171,9 @@ def algo_linux():
     
     # check available networks in linux
     available_its =[]
-    # check devices using nmcli
-    devices = subprocess.check_output(["nmcli", "dev", "wifi"])
-    # devices = subprocess.check_output(
-    #     ["/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport", '-s'])
+    # check devices using iwlist scan 
+    devices = subprocess.check_output(["iwlist", "scan"])
+    # devices = subprocess.check_output(["nmcli", "dev", "wifi"])
     devices = devices.decode('ascii')
     devices = devices.split("\n")
     for _ in devices:
@@ -212,7 +211,9 @@ def algo_linux():
 
         # Connect to the network {networksetup -setairportnetwork en0 <SSID_OF_NETWORK> <PASSWORD>}
         # only_its in not empty
-        # check if the network is already connected to the prefered network For linux using nmcli
+        # check if the network is already connected to the prefered network For linux using nmcli ussing bash command to only get the ssid
+        network_connected = subprocess.check_output(
+            ["nmcli", "connection", "show", "--active"])
         network_connected = subprocess.check_output(
             ["nmcli", "connection", "show", "--active"])
         # network_connected = subprocess.check_output(
@@ -236,7 +237,7 @@ def algo_linux():
         else:
             if len(only_its) != 0:
                 # connect to the network from a linux terminal from subprocess using nmcli
-                subprocess.call(['nmcli', 'device', 'wifi', 'connect', network_to_connect, 'password', 'iiitbbsr'])
+                subprocess.call(['nmcli', 'device', 'wifi', 'connect', '{}'.format(network_to_connect), 'password', 'iiitbbsr'])
                 # subprocess.check_output(
                 #     ['networksetup', '-setairportnetwork', 'en0', network_to_connect, 'iiitbbsr'])
                 print("Connected to : {} ".format(network_to_connect))
