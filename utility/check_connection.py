@@ -74,8 +74,7 @@ def check_wifi_connection_mac():
 def check_wifi_connection_linux():
     # Check available connections
     available_its = []
-    # devices = subprocess.check_output(
-    #     ["nmcli", "dev", "wifi"])
+
     devices = subprocess.check_output(["iwlist", "scan"])
     devices = devices.decode('ascii')
     devices = devices.split("\n")
@@ -134,6 +133,7 @@ def check_wifi_connection_linux():
         else:
             if len(only_its) != 0:
                 subprocess.check_output(
+
                     ['nmcli', 'dev', 'wifi', 'connect', preferred_network, 'password', 'iiitbbsr'])
                 # print("Connected to : {} ".format(network_to_connect))
             else:

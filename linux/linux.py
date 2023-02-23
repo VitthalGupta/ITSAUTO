@@ -178,11 +178,11 @@ def algo_linux():
     
     # check available networks in linux
     available_its =[]
+
     # check devices using nmcli
     #devices = subprocess.check_output(["nmcli", "dev", "wifi"])
     devices = subprocess.check_output(["iwlist", "scan"])
-    # devices = subprocess.check_output(
-    #     ["/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport", '-s'])
+
     devices = devices.decode('ascii')
     devices = devices.split("\n")
     for _ in devices:
@@ -220,6 +220,7 @@ def algo_linux():
 
         # Connect to the network {networksetup -setairportnetwork en0 <SSID_OF_NETWORK> <PASSWORD>}
         # only_its in not empty
+
         # check if the network is already connected to the prefered network For linux using nmcli
         network_connected = subprocess.check_output(
             ["nmcli", "connection", "show", "--active"])
@@ -244,6 +245,7 @@ def algo_linux():
         else:
             if len(only_its) != 0:
                 # connect to the network from a linux terminal from subprocess using nmcli
+
                 subprocess.call(['nmcli', 'device', 'wifi', 'connect', preferred_network, 'password', 'iiitbbsr'])
                 # subprocess.check_output(
                 #     ['networksetup', '-setairportnetwork', 'en0', network_to_connect, 'iiitbbsr'])
