@@ -42,7 +42,7 @@ else:
 # check from var if the algorithm is running for the first time
 # Starts the setup for first time installation
 first_time = bool(fetch_var("First time"))
-if first_time == "True":
+if first_time == True:
     print("Script Configuration :")
     print("Installing Cryptography")
     install("cryptography")
