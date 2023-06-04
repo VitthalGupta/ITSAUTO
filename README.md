@@ -74,39 +74,37 @@ This repo will automate the authentication process for ITS for all available net
 ## Directory Structure
 
 '''
-.
-├── CODE_OF_CONDUCT.md \
-├── LICENSE\
-├── README.md \
-├── cleanup.py\
-├── cred\
-│   ├── CredFile.ini\
-│   └── key.key\
-├── linux\
-│   ├── README.md\
-│   └── linux.py\
-├── mac\
-│   ├── README.md\
-│   └── mac.py\
-├── main.py\
-├── path.py\
-├── utility\
-│   ├── __init__.py\
-│   ├── check_internet.py\
-│   ├── credentials.py\
-│   ├── fetch_data.py\
-│   ├── install_package.py\
-│   ├── update_script.py\
-│   └── update_var.py\
-├── var\
-│   └── var.txt\
-└── windows\
-    ├── README.md\
-    │   └── windows.cpython-310.pyc\
-    └── windows.py\
+├── CODE_OF_CONDUCT.md 
+├── LICENSE
+├── README.md
+├── cleanup.py
+├── cred
+│   ├── CredFile.ini
+│   └── key.key
+├── linux
+│   ├── README.md
+│   └── linux.py
+├── mac
+│   ├── README.md
+│   └── mac.py
+├── main.py
+├── path.py
+├── utility
+│   ├── __init__.py
+│   ├── check_internet.py
+│   ├── credentials.py
+│   ├── fetch_data.py
+│   ├── install_package.py
+│   ├── update_script.py
+│   └── update_var.py
+├── var
+│   └── var.txt
+└── windows
+    ├── README.md
+    │   └── windows.cpython-310.pyc
+    └── windows.py
 
 10 directories, 33 files
-
 '''
 
 ## Developed by
