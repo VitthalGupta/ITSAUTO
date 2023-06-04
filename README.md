@@ -73,7 +73,7 @@ This repo will automate the authentication process for ITS for all available net
 
 ## Directory Structure
 
-'''
+```
 ├── CODE_OF_CONDUCT.md 
 ├── LICENSE
 ├── README.md
@@ -105,7 +105,7 @@ This repo will automate the authentication process for ITS for all available net
     └── windows.py
 
 10 directories, 33 files
-'''
+```
 
 ## Developed by
 
