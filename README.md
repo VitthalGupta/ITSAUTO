@@ -109,6 +109,10 @@ This repo will automate the authentication process for ITS for all available net
 
 ## Developed by
 
-Vitthal Gupta - b319063@iiit-bh.ac.in <br\> [Github](https://github.com/VitthalGupta) <br\> [LinkedIn](https://www.linkedin.com/in/vitthal-g-0a0717b8/)
+<a href="https://github.com/VitthalGupta/ITSAUTO/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=VitthalGupta/ITSAUTO" />
+</a>
 
-Bignesh Sahoo - b319013@iiit-bh.ac.in <br\> [Github](https://github.com/bigsbunny) <br\> [LinkedIn](https://www.linkedin.com/in/bighnesh-sahoo/)
+Made with [contrib.rocks](https://contrib.rocks).
+
+[EOF]
